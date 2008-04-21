@@ -1,0 +1,752 @@
+<?php
+//xdebug_start_profiling();
+
+// --------- Setup BEGIN ----------
+
+
+require_once 'Smarty.class.php';
+require_once "../conf/config.php";
+
+require_once "../classes/question.php";
+require_once "../classes/question_list.php";
+require_once "../classes/survey_part.php";
+require_once "../classes/student.php";
+require_once "../classes/student_status.php";
+require_once "../classes/institution.php";
+require_once "../classes/generic_survey.php";
+
+// Add follow line in an attempt to fix the issues described at
+// http://bugs.php.net/bug.php?id=25876
+ini_set('session.save_handler', 'files');
+session_start();
+$error_code = 0;
+
+// Setup templates
+$smarty = new Smarty;
+$smarty->template_dir = template_dir.'templates';
+$smarty->compile_dir = template_dir.'templates_c';
+$smarty->config_dir = template_dir.'config';
+$smarty->cache_dir = template_dir.'cache';
+$smarty->register_outputfilter("fixDates");
+$smarty->register_outputfilter("courseLabel");
+if (debug)
+  $smarty->debugging = true;
+
+// Setup Database connection
+$db = DB::connect($dsn, true);
+if (DB::isError($db)){
+    die ("survey.php:".$db->getMessage());
+}
+
+
+$returnUser     = false;
+$fromCEQMajors  = false;
+$fromPREQ       = false;
+
+// default action value
+$action='';
+if (isset($HTTP_POST_VARS['btn_studentID']) || (isset($HTTP_GET_VARS['student_id']) &&  count($HTTP_POST_VARS) == 0 ))
+  $action = 'studentID';
+elseif (isset($HTTP_POST_VARS['btn_survey']) )
+  $action = 'survey';
+elseif (isset($HTTP_POST_VARS['btn_skip']))
+  $action = 'skip';
+elseif (isset($HTTP_POST_VARS['btn_exit']))
+  $action = 'exit';
+elseif (isset($HTTP_POST_VARS['btn_prev']))
+  $action = 'survey_prev';
+elseif (isset($HTTP_POST_VARS['btn_prev_ceq_majors']))
+{
+  $action = 'survey_prev';
+  $fromCEQMajors = true;
+}
+elseif (isset($HTTP_POST_VARS['btn_prev_preq']))
+{
+  $action = 'survey_prev';
+  $fromPREQ = true;
+}
+
+
+// --------- Setup END ----------
+
+// --------- Action BEGIN -------
+
+// Try and get the student_id from the session information or get
+if (isset($_SESSION['student_id']) || isset($HTTP_GET_VARS['student_id'])){
+  if (isset($_SESSION['student_id']))
+    $student_id = $_SESSION['student_id'];
+  if (isset($HTTP_GET_VARS['student_id']))
+    $student_id = $HTTP_GET_VARS['student_id'];
+  $student_id = $_SESSION['student_id'];
+  $student = new student;
+  $student->retrieve($student_id,$db);
+  // Retrieve Student Status
+  $student_status = new student_status ($student->GetStudent_id());
+  if ($student_status->retrieve($db))
+  {
+    $mode          = $student_status->mode;
+    if ($mode == 'already_complete')
+      $mode ='survey';
+    $last_displayed= $student_status->questions;
+    $answers       = $student_status->answers;
+    $survey_part   = $student_status->survey_part;
+    $section_index = $student_status->section_index;
+    $section_id    = $student_status->section_id;
+    $ceq_majors    = $student_status->ceq_majors;
+    $current_major = $student_status->current_major; 
+    $pages         = $student_status->pages; 
+  }
+}
+else
+{
+  if (!isset($_POST['btn_studentID']))
+    $action = '';
+}
+$done = false;
+$skip = false;
+
+if ($action =='')
+{
+  $done=true;
+  $mode='initial';
+}
+
+while (!$done)
+{
+  switch ($action)
+  {
+    case 'studentID':
+    {
+      if(isset($HTTP_GET_VARS['student_id']))
+      {
+        $student_id = $HTTP_GET_VARS['student_id'];
+      }
+      else
+      {
+      $student_id_1 = strtoupper($HTTP_POST_VARS['student_id_1']);
+      $student_id_2 = strtoupper($HTTP_POST_VARS['student_id_2']);
+      $student_id_3 = strtoupper($HTTP_POST_VARS['student_id_3']);
+      $student_id = $student_id_1.$student_id_2.$student_id_3;
+      }
+      $student = new student;
+      if ($student->retrieve($student_id,$db))
+      {
+        // Good Student - Have they previously completed the survey 
+        if ($student->surveyComplete())
+        {
+          $mode  = 'already_complete';
+        }
+        else
+        {
+          $mode  = 'survey';
+          // Retrieve Student Status
+          $student_status = new student_status ($student->GetStudent_id());
+          if ($student_status->retrieve($db))
+          {
+            $mode          = $student_status->mode;
+            if ($mode == 'already_complete')
+              $mode ='survey';
+            $last_displayed= $student_status->questions;
+            $answers       = $student_status->answers;
+            $survey_part   = $student_status->survey_part;
+            $section_index = $student_status->section_index;
+            $section_id    = $student_status->section_id;
+            $ceq_majors    = $student_status->ceq_majors;
+            $current_major = $student_status->current_major; 
+            $pages         = $student_status->pages; 
+            if ($survey_part == 'ceq' && !$ceq_majors)
+              $mode ='ceq_majors';
+            $returnUser = true;
+          }
+        }
+      }
+      else
+      {
+        $smarty->assign('student_id_1', $student_id_1); 
+        $smarty->assign('student_id_2', $student_id_2); 
+        $smarty->assign('student_id_3', $student_id_3); 
+        $smarty->assign('message', "Invalid oGDS login ID"); 
+        $mode='initial';
+      }
+
+      if ($mode != 'survey')
+      {
+        $done = true;
+      }
+      else
+      {
+        $action = 'survey';
+      }
+
+    } break;  // ACTION - studentID
+
+    case 'skip':
+    {
+      $skip = true;
+      $action = 'survey';
+
+    } break; // ACTION - skip
+    case 'exit':
+    {
+      $done = true;
+      $mode = 'exit';
+      // Retrieve answers form the form
+      if (isset($last_displayed))
+      {
+        $prev_questions = $last_displayed;
+        foreach ($prev_questions as $quest)
+        {
+          if (isset($HTTP_POST_VARS['ans_'.$quest])){
+            if ($survey_part == 'ceq')
+            {
+              $answers["$quest:$current_major"] = $HTTP_POST_VARS['ans_'.$quest];
+            }
+            else
+              $answers[$quest] = $HTTP_POST_VARS['ans_'.$quest];
+          }
+          else
+          {
+            unset($answers[$quest]);
+          }
+        }
+      }
+    } break;
+  
+    case 'survey':
+    case 'survey_prev':
+    {
+      // Check that Survey is not closed
+      $generic_survey = new generic_survey();
+      $generic_survey->setSurvey_ID($student->getSurvey_ID());
+      $generic_survey->retrieve($db);
+      if ($generic_survey->getSurvey_Status() == SURVEY_STATUS_CLOSED)
+      {
+        $mode = 'survey_closed';
+        $done = true;
+        continue;
+      }
+      $mode = 'survey';
+      $prev_questions = array();
+      // Retrieve answers form the form
+      if (isset($last_displayed))
+      {
+        $prev_questions = $last_displayed;
+        foreach ($prev_questions as $quest)
+        {
+          if (isset($HTTP_POST_VARS['ans_'.$quest])){
+            if ($survey_part == 'ceq')
+            {
+              $answers["$quest:$current_major"] = $HTTP_POST_VARS['ans_'.$quest];
+            }
+            else
+              $answers[$quest] = $HTTP_POST_VARS['ans_'.$quest];
+          }
+          else
+          {
+            unset($answers[$quest]);
+          }
+        }
+      }
+      // retrieve current survey part from session. Default GDS
+      if (!isset($survey_part))
+      {
+        if (! isset($survey_part))
+        {
+          $survey_part = 'gds';
+        }
+      }
+      
+      // Create a survey instance 
+      $survey = survey_part::create($survey_part);
+      $survey->SetDB($db);
+      $survey->SetSurvey_ID($student->getSurvey_ID());
+      $survey->SetInstitution_ID($student->getInstitution_ID());
+      $survey->retrieve();
+
+      $institution = new institution();
+      $institution->retrieve($student->getInstitution_ID(),$db);
+      $courseLabel=$institution->getCourseLabel();
+      if ($logo = $institution->getLogo())
+      {
+        $smarty->assign('institution_logo',$logo);
+      }
+
+      $smarty->assign('institution_email',$institution->getEmail());
+      switch ($survey_part)
+      {
+        case 'gds':
+        {
+          // If the section_id is not set,set it to 1
+          $first_section = false;
+          if (! isset($section_id))
+          {
+            $section_id = 1;
+            $section_index = 0;
+            $first_section = true;
+          }
+          // Initialise the current section
+          $survey->setCurrent_section($section_id);
+          $survey->setCurrent_section_index($section_index);
+          // Work out the number of "pages" in this survey
+          $pages=array();
+          $pages['gds'] = count($survey->section_order);
+          if ($student->getStudent_Type() == 'G')
+            $pages['ceq'] = 3;
+          else
+            $pages['preq'] = 1;
+          $student_status->pages = $pages;
+        } break;
+
+        case 'ceq':
+        {
+          $first_display = true;
+          $survey->setCEQmajors('0');
+          $survey->setCurrentMajor('1');
+          # Get number of majors from the form
+          # We know we have come from the number_of_majors screen
+          if (isset ($HTTP_POST_VARS['ceq_majors']))
+          {
+            $ceq_majors=$HTTP_POST_VARS['ceq_majors'];
+            $current_major = 1;
+          }
+          # Get the number of majors from the session
+
+          if ($ceq_majors)
+          {
+            if ($ceq_majors != 1 && $ceq_majors != 2){
+              $ceq_majors = 1;
+            }
+            $survey->setCEQmajors($ceq_majors);
+            $survey->setCurrentMajor($current_major);
+            if (isset ($HTTP_POST_VARS['major']) )
+            {
+              if ($HTTP_POST_VARS['major'] == $current_major)
+                $first_display = false;
+            }
+          }
+          $student_status->ceq_majors     = $survey->getCEQmajors();
+          $student_status->current_major  = $survey->getCurrentMajor();
+      
+          $survey->init();
+        } break;
+  
+        case 'preq':
+        {
+          // I don't think I need to do anything here as the PREQ is straight forward
+        } break;
+
+      } // END SWITCH survey_part
+
+      // Populate the survey with the answers so we can validate them
+      $survey->setAnswers($answers);
+      // Which questions were displayed last round
+      $survey->setDisplayed($last_displayed);
+//      if ($answers)
+//        $survey->setDisplayed(array_keys($answers));
+
+      // Have we completed the GDS?
+      // Moving forward in survey
+      if ($action == 'survey')
+      {
+        switch ($survey_part)
+        {
+          case 'gds':
+          {
+            if (!$first_section && !$returnUser)
+            {
+              if ($survey->nextSection($answers,$skip))
+              {
+                $section_id = $survey->getCurrent_section();
+                $section_index = $survey->getCurrent_section_index();
+                $error_code = $survey->getError_code();
+                $done = true;
+              }
+              else 
+              {
+                // Go to CEQ or PREQ
+                $first_display = true;
+                $skip = false;
+                if ($student->getStudent_Type() == 'G')
+                {
+                  $mode        = 'ceq_majors';
+                  $survey_part = 'ceq';
+                  $done        = true;
+                }
+                elseif ($student->getStudent_Type() == 'P') 
+                  $survey_part = 'preq';
+                else
+                  $survey_part = 'error';
+              }
+            }
+            else   // Not at the first section
+            {
+              $done = true;
+            }
+          } break;
+  
+          case 'ceq':
+          {
+            if (!$first_display && !$returnUser)
+            {
+              if ($survey->nextMajor($answers,$skip))
+              {
+                $error_code = $survey->getError_code();
+                $done = true;
+              }
+              else
+              {
+                $mode = 'complete';
+                $done = true;
+              }
+            }
+            else
+            {
+              $done = true;
+            }
+          } break;
+  
+          case 'preq':
+          {
+            if (! $first_display && !$returnUser)
+            {
+              if ($survey->preqComplete($answers, $skip))
+              {
+                $error_code = $survey->getError_code();
+                $done = true;
+              }
+              else
+              {
+                $mode = 'complete';
+                $done = true;
+              }
+            }
+            else
+            {
+              $done = true;
+            }
+          } break;
+        }  // ACTION survey
+      }
+      // moving back in survey
+      elseif ($action =='survey_prev')
+      {
+        switch ($survey_part)
+        {
+          case 'gds':
+          {
+            if (!$fromPREQ && !$fromCEQMajors && $survey->prevSection($answers))
+            {
+              $section_id = $survey->getCurrent_section();
+              $section_index = $survey->getCurrent_section_index();
+              $error_code = $survey->getError_code();
+              $done = true;
+            }
+            else
+              $done = true;
+          }break;
+
+          case 'ceq':
+          {
+            if ($fromCEQMajors)
+              $survey_part = 'gds';
+            else
+            {
+              if ($current_major == 1)
+              {
+                $mode = 'ceq_majors';
+                $first_display = true;
+              }
+              else
+              {
+                $current_major = 1;
+                $survey->setCurrentMajor($current_major);
+                $student_status->current_major  = $survey->getCurrentMajor();
+              }
+              $done=true;
+            }
+          }break;
+          case 'preq':
+          {
+            if ($fromPREQ)
+              $survey_part = 'gds';
+          }break;
+
+        }  // SWITCH $survey_part
+      }
+    } break;  // ACTION survey
+    default:  // ACTION
+    {
+      $done = true;
+    } break;
+  }
+}
+
+
+// --------- action end ---------
+
+// --------- debugging begin ----
+if (debug){
+ print "<div class='debug'>";
+ print "<pre>";
+ print "post vars<br>";
+ print_r($HTTP_POST_VARS);
+ print "Student status<br>";
+ print_r($student_status);
+ print "<br>session vars<br>";
+ print_r ($_SESSION);
+ print "mode:     $mode<br>";
+ print "action:   $action<br>";
+ print "error:    $error_code<br>";
+ print "template: $template<br>";
+ print "survey_part: $survey_part<br>";
+ print "[ceq_majors]: $ceq_majors<br>";
+ print "[current_major]: $current_major<br>";
+ print "survey_part: $survey_part<br>";
+ print "student_id: $student_id<br>";
+ print "prev_questions:";
+ print "</pre></div>\n";
+}
+// --------- debugging end ------
+
+
+// --------- display begin ------
+switch ($mode){
+  case 'ceq_majors':
+  {
+    # Lets get the number of majors this sucker did
+    $template = 'ceq_majors.tpl';
+    $page_title = strtoupper($survey_part);
+
+    // Retrieve institution infomation
+    $institution = new institution();
+    $institution->retrieve($student->getInstitution_ID(),$db);
+    $survey_year    = $survey->survey_year;
+    $survey_period  = $student->getSurvey_Period();
+    $year_completed = $survey_year-1;
+    if ($survey_period == 0)
+    {
+      $survey_date = "30 April $survey_year";
+      $smarty->assign('survey_year', $survey_year);
+    }
+    else
+    {
+      $survey_date = "31 October $year_completed";
+      $smarty->assign('survey_year', $year_completed);
+    }
+    $smarty->assign('survey_month', $survey_periods[$student->getSurvey_Period()]);
+
+    $smarty->assign('ceq_majors',$ceq_majors);
+    $smarty->assign('survey_part', $survey_part); 
+    $smarty->assign('institution_name', $institution->getInstitution_Name());
+
+    $current_page = $pages['gds'] + 1;
+    // switch back to survey mode
+    // $mode =   'survey';
+  } break;
+
+  case 'survey_prev':
+  case 'survey':
+  {
+    $template = $survey_part.".tpl";
+    $page_title = strtoupper($survey_part);
+    // Get the questions to be displayed
+   
+    $questions = $survey->display();
+
+    // Retrieve institution infomation
+    $institution = new institution();
+    $institution->retrieve($student->getInstitution_ID(),$db);
+
+    // Which questions are being displayed?
+    $display_qids = array();
+    foreach ($questions as $question)
+    {
+       $display_qids[] = $question['question_id'];
+    }
+    switch ($survey_part)
+    {
+      case 'gds':
+      {
+        $smarty->assign('section_index',$survey->getCurrent_section_index());
+        $smarty->assign('section_name',$survey->getCurrentSection_Name());
+        $smarty->assign('section_text',$survey->getCurrentSection_Text());
+        $page_title .= " - " . $survey->getCurrentSection_Name();
+        $current_page = $section_index + 1;
+  
+        $student_status->section_id = $section_id;
+        $student_status->section_index = $section_index;
+      } break;
+
+      case 'ceq':
+      {
+        // Major Question
+        $major_question = $survey->display_major();
+
+        // add major questions to those displayed
+        foreach ($major_question as $question)
+        {
+           $display_qids[] = $question['question_id'];
+        }
+        $smarty->assign('major_question',$major_question);
+
+        // Additional Questions (if required)
+        if ($survey->getCEQmajors() == $survey->getCurrentMajor()){
+          $additional_questions = $survey->display_additional();
+          foreach ($additional_questions as $question)
+          {
+             $display_qids[] = $question['question_id'];
+          }
+          $smarty->assign('additional_questions',$additional_questions);
+        }
+
+        $smarty->assign('ceq_majors',$survey->getCEQmajors());
+        $smarty->assign('current_major',$survey->getCurrentMajor());
+
+        $student_status->ceq_majors     = $survey->getCEQmajors();
+        $student_status->current_major  = $survey->getCurrentMajor();
+        $page_title .=  " - Major ".$survey->getCurrentMajor();
+        // work out number of pages
+        $pages['ceq'] = $student_status->ceq_majors + 1;
+        $student_status->pages = $pages;
+        $current_page = $pages['gds'] + 1 +  $survey->getCurrentMajor();
+
+      } break;
+      case 'preq':
+      {
+        $current_page = $pages['gds'] + 1;
+      } break;
+
+    }
+
+
+    $survey_year    = $survey->survey_year;
+    $survey_period  = $student->getSurvey_Period();
+    $year_completed = $survey_year-1;
+    if ($survey_period == 0)
+    {
+      $survey_date = "30 April $survey_year";
+      $smarty->assign('survey_year', $survey_year);
+    }
+    else
+    {
+      $survey_date = "31 October $year_completed";
+      $smarty->assign('survey_year', $year_completed);
+    }
+  
+    $smarty->assign('survey_month', $survey_periods[$student->getSurvey_Period()]);
+    $smarty->assign('survey_part', $survey_part); 
+    $smarty->assign('institution_name', $institution->getInstitution_Name());
+    $smarty->assign('questions', $questions); 
+  } break;
+  
+  case 'initial':
+  {
+    $page_title = "Enter student ID";
+    $template = "get_student_id.tpl";
+    // Clean up any old sessions from old attempts BPM 1 Oct 2003
+    $_SESSION = array(); 
+    session_unset();
+    session_destroy();
+  }  break;
+  case 'already_complete':
+  {
+    $page_title = "Survey previously completed";
+    $template = 'survey_already_complete.tpl';
+    session_destroy();
+  }  break;
+  case 'survey_closed':
+  {
+    $page_title = "Survey is Closed";
+    $template = 'survey_closed.tpl';
+    session_destroy();
+  }  break;
+
+  case 'complete':
+  {
+    // Clean Answers
+    // Clean CEQ
+    if ($student->getStudent_Type() == 'G')
+    {
+      $survey->cleanAnswers($answers);
+    }
+    // Don't need to clean the PREQ because it's nice and simple :)
+    // Clean GDS
+    unset($survey);
+    $survey = survey_part::create('gds');
+    $survey->SetDB($db);
+    $survey->SetSurvey_ID($student->getSurvey_ID());
+    $survey->SetInstitution_ID($student->getInstitution_ID());
+    $survey->retrieve();
+    $survey->setCurrent_section(1);
+    $survey->setCurrent_section_index(0);
+    $survey->setAnswers($answers);
+    $survey->cleanAnswers($answers);
+    
+    // Save results & mark student as having completed the survey
+    $student->saveAnswers($db,$answers);
+    // remove status
+    $student_status->remove($db);
+    unset($student_status);
+
+    $page_title = "Survey complete";
+    $template = 'survey_complete.tpl';
+    session_destroy();
+  } break;
+
+  case 'exit':
+  {
+    $page_title = "Survey State Saved";
+    $template = 'survey_exited.tpl';
+    session_destroy();
+  } break;
+  default:
+  {
+  }
+}
+// --------- Display END --------
+
+$_SESSION['student_id'] = $student_id;
+if (isset($student_status))
+{
+  $student_status->answers     = $answers;
+  $student_status->questions   = $display_qids;
+  $student_status->survey_part = $survey_part;
+  if ($mode != 'initial' && $mode != 'exit')
+    $student_status->mode        = $mode;
+  $student_status->store($db);
+}
+
+$smarty->assign('title',$page_title);
+$smarty->assign('error_code',$error_code);
+if (is_array($pages))
+{
+  $smarty->assign('pages',array_sum($pages));
+  $smarty->assign('current_page',$current_page);
+}
+$smarty->display($template); 
+
+$db->disconnect();
+//xdebug_dump_function_profile();
+
+exit;
+
+// This is the end
+// Beautiful friend
+// This is the end
+// My only friend, the end 
+
+function fixDates($tpl_source, &$smarty) {
+  global $year_completed;
+  global $survey_date;
+  return str_replace(array("%year_completed%","%survey_date%"), array($year_completed,$survey_date), $tpl_source);
+}
+
+function courseLabel($tpl_source, &$smarty) {
+  global $courseLabel;
+  if ($courseLabel)
+    return str_replace(array("course","Course","programwork","program related"), array("program","Program","coursework","course related"), $tpl_source);
+  else
+    return $tpl_source;
+}
+
+?>
