@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head><title>Paypal Email Valid checker</title>
+  <meta charset="utf-8">
+        <style>
+                @import "http://fonts.googleapis.com/css?family=Play:400,700";
+
+
+                        body {
+background: #eee
+                                   font-family: 'Cabin', sans-serif;
+    font-weight: 600;
+    color:#959da6;
+    font-size:11px;
+    position:center;
+background-color:black;
+		}
+form-container
+	{ 	color:#FF4500;
+	font-family: 'Comic Sans MS', sans-serif;
+	font-size:13px;
+		border-radius:10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		box-shadow: 0px 0px 15px #FF4500;
+		-moz-box-shadow: 0px 0px 15px #FF4500;
+		-webkit-box-shadow: 0px 0px 15px #FF4500;
+		margin:30px auto;
+		padding:10px;
+		width:680px;
+		text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+	}
+	hr { color:#FF4500;
+	font-family: 'Comic Sans MS', sans-serif;
+	font-size:13px;
+		background-color: #131313;
+		border: solid 1px #FF4500;
+		border-radius:10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		box-shadow: 0px 0px 15px #FF4500;
+		-moz-box-shadow: 0px 0px 15px #FF4500;
+		-webkit-box-shadow: 0px 0px 15px #FF4500;
+		text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+                        }
+                    textarea, input, select {
+                                border:0;
+                                BORDER-COLLAPSE:collapse;
+border:double 2px #696969;
+                                color:#fff;
+                                background-color: rgba(0, 0, 0, 0.4);
+                                margin:0;
+                                padding:2px 4px;
+                                font-family: Lucida Console,Tahoma;
+                                font-size:12px;
+								box-shadow: 0 0 15px gray;
+								-webkit-box-shadow: 0 0 15px gray;
+								-moz-box-shadow: 0 0 15px blue;
+
+
+                        }
+                        .title{
+                                color: #eee;
+                                background:    black;
+                                text-align:    center;
+                                font-size:    120%;
+                        }
+.ta10 {
+                            background: url(http://b-i.forbesimg.com/centurylink/files/2013/06/cyber-security.jpg);
+                            background-color: blue;
+                            background-repeat:no-repeat;
+                            background-size: 52% 100%;
+                            background-position: center;
+                            border:2px double #696969;
+                            padding:3px;
+                            margin-right:4px;
+                            margin-bottom:8px;
+                            font-family: Lucida Console,Tahoma;
+                            font-size:12px;
+                            box-shadow: 0 0 5px white;
+                           -webkit-box-shadow: 0 0 5px white;
+                           -moz-box-shadow: 0 0 5px white;
+                           border: solid 0px transparent; // or border: none;
+                        }
+.submit-button{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: darkgrey;
+ background-image:url();
+    border: 1px solid #1a1a1a;
+    padding:6px 10px;height:27px;width:143px;
+border-radius:4px;}
+.submit-button:hover {
+    background-image:url(background.jpg);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+    color: darkgrey;
+    border-color: #1a1a1a;
+    height:27px;width:143px;}
+                        header {
+                                font-family: Lucida Console;
+                                font-size: 12px;
+                                text-align: center;
+                                padding-top: 10px;
+                                color: #FF4500;
+                                text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+                        }
+
+input,select,textarea,table {
+	color:#FF4500;
+	font-family: 'Comic Sans MS', sans-serif;
+	font-size:13px;
+		background-color: #131313;
+		border: solid 1px #FF4500;
+		border-radius:10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		box-shadow: 0px 0px 15px #FF4500;
+		-moz-box-shadow: 0px 0px 15px #FF4500;
+		-webkit-box-shadow: 0px 0px 15px #FF4500;
+		margin:30px auto;
+		padding:10px;
+		width:680px;
+		text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+button {
+background: url(background.jpg) repeat;
+    overflow: hidden;
+    color: #FF4500;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.45);}
+}
+.donate-button {
+    text-align: center;
+}
+.donate-button .bitcoin-address {
+    font-size: 1.5em;
+}
+
+input:hover, textarea:hover, select:hover, button:hover {
+background: none repeat scroll 0 0 #282322 ;
+border: 1px solid darkred;
+}
+
+option {
+background: none repeat scroll 0 0 #000000;
+}
+a{
+text-decoration: none;
+
+                        }
+                        .char {
+                          transition: all 5s; -webkit-transition: all 1s;
+                          opacity: 0.8;
+                        }
+                        .char:hover {
+                          transition: all 0.1s; -webkit-transition: all 0.1s;
+                          opacity:1.5;
+                          text-shadow: 0 0 1em white;
+                        }
+                        .chara:not(.space):hover {
+                          transform: rotateY(1440deg);
+                          -webkit-transform: rotateY(1440deg);
+                        }
+                        .chara:not(.space) {
+                          display: inline-block;
+                          transition: transform 2s ease-out;
+                          -webkit-transition: -webkit-transform 2s ease-out;
+                        }
+                        h4{
+
+color: #293038;
+                font-size: 30px;
+                font-weight: 700;
+                line-height: 56px;
+                margin: 0;
+                padding: 0 0 0 15px;
+
+                font-family: Play,"Harlow Solid Italic",Helvetica,Times,serif;
+text-shadow: 0 1px 0 #6c5e8b, 0 -1px 0 rgba(0,0,0,0.6);}
+.main-result1{
+font-family: 'Cabin', sans-serif;
+font-size: 11px;
+margin-top: 20px;
+            border-top: 1px solid #5E6771;
+            border-left: 1px solid #525B68;
+            border-bottom: 1px;
+            border-right: 1px;
+            border-radius: 1px;
+            box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+            position: relative;
+            background-color: #262C34;
+            width:100%; max-height: 250px; overflow: auto;
+
+option {
+background: none repeat scroll 0 0 #000000;
+}
+	}
+.submity-button:hover {
+    background-image:url();
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+    color: red;
+    border-color: #1a1a1a;
+    height:40px;width:150px;}
+.business{color:gold;}.premier{color:green;}.verified{color:#006DB0;}
+k1 {
+font-family: Arial;
+font-size: 15px;
+text-transform: uppercase;
+color: #293038;
+text-shadow: 0 1px 0 #6c5e7b, 0 -1px 0 rgba(0,0,0,0.6);
+
+}
+        </style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+String.prototype.contains = function(it)
+{
+   return this.indexOf(it) != -1;
+};
+$(document).ajaxStop(function() {
+    alert("Check Done!");
+    $("#cok").text($("#ok").find('br').length);
+    $("#cbad").text($("#bad").find('br').length);
+});
+$(document).ready(function(){
+    var st;
+    $("#start").click(function(){
+        $("#ok").text("");
+        $("#bad").text("");
+        var em = $("#pop").val().split("\n");
+        var i = 0;
+        for (i = 0; i < em.length; i++){
+           if(em[i] != ""){
+               st = $.post("function.php",{
+                        ue: em[i]
+                    },function(data){
+                        if(data.search("color=red") >= 0){
+                            if(i == 0){
+                                $("#bad").text(data+"<br>");
+                            }else{
+                                $("#bad").append(data+"<br>");
+                            }
+                        }else{
+                            if(i == 0){
+                                $("#ok").text(data+"<br>");
+                            }else{
+                                $("#ok").append(data+"<br>");
+                            }
+                       }
+                     $("#counter").text(i);
+               });
+           }
+        }
+    });
+    $("#stop").click(function(){
+	var em = $("#pop").val().split("\n");
+        var i = 0;
+    	for (i = 0; i < em.length; i++){
+    		st.abort();
+    	}
+    });
+});
+</script>
+</head>
+<body>
+<div align="center" class="form-container"> 
+		<font color="#FF4500"> <font size="5"># Paypal Email Valid Checker #</font></font><p>&nbsp;</div>
+
+				<div class='content' style="display:none;">
+		<div style="border: 1px blue ridge;-moz-box-shadow: inset 0px 0px 8px 1px aqua;-webkit-box-shadow: inset 0px 0px 8px 1px aqua;width: 695px;opacity: 0.85;
+background-color: rgba(75, 75, 225, 0.1);">
+<div style="color:#dfdedc;margin-top: 3px;"></div><hr style="margin-top: 1px;margin-bottom: 2px;">
+
+		</div>
+		</div>
+        </dt>
+        </center>
+                </header>
+</div>
+   <header>
+      <div>
+        <br>
+<center><textarea id=pop name='val' cols=10 rows=20 style='width:50%;'></textarea><br>
+<button id=start value="WOOT">Check</button><button id=stop value="WOOT">Stop</button>
+</p><k1>-=-=-=- RESULT email -=-=-=-</k1>
+<br>
+
+<table style="width: 1024px;">
+        <tr>
+      <td style="width: 1024px;">
+<fieldset class="fieldset">
+        <font color="white">LIVE: <br><br /><span id="ok" style="overflow-y:auto; width:500px; font-size: 11px;"></span></font></legend>
+        <div id="pplive"></div>
+    </fieldset><br>
+    <fieldset class="fieldset">
+        <font color="white">DIE: <br><br /><span id="bad" style="overflow-y:auto; width:500px; font-size: 11px;"></span></font></legend>
+        <div id="ppdie"></div>
+    </fieldset><br>
+</tr></table>
+                        </center>
+<center>
+<table>
+<tr>
+
+<td>Total Live:<span id=cok ></span></td>
+<td>Total Die :<span id=cbad ></span></td>
+</tr>
+</table>
+<p>&nbsp;</p>
+
+<script>
+$(document).ready(function () {
+    $('.donate-button-link').on('click', function (e) {
+        e.preventDefault();
+        $(this).slideUp(100);
+        $('.bitcoin-address').slideDown(100);
+    });
+});
+// Hide address immediately if JS is enabled
+document.querySelector('.bitcoin-address').style.display = 'none';
+</script>
+</body>
