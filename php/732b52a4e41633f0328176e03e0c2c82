@@ -1,0 +1,80 @@
+<?php
+
+
+session_start();
+
+
+// Get Country
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+    $result  = "Unknown";
+    if(filter_var($client, FILTER_VALIDATE_IP))
+    {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    {
+        $ip = $forward;
+    }
+    else
+    {
+        $ip = $remote;
+    }
+
+    $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ip));
+
+    if($ip_data && $ip_data->geoplugin_countryCode != null)
+    {
+        $country = $ip_data->geoplugin_countryCode;
+    }
+    
+    $ip_data2 = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ip));
+
+    if($ip_data2 && $ip_data2->geoplugin_countryName != null)
+    {
+        $countryname = $ip_data2->geoplugin_countryName;
+    }
+
+
+
+
+$_SESSION['DZNCOUNT']=$countryname;
+
+$_SESSION['DZNCOUNTCODE']=$country;
+$_SESSION['country_name']=$countryname;
+
+if ($country == "FR" || $country == "DZ" || $country == "MA" || $country == "TN" || $country == "CD" || $country == "MG" || $country == "CM" || $country == "CA" || $country == "CI" || $country == "BF" || $country == "NE" || $country == "SN" || $country == "ML" || $country == "RW" || $country == "BE" || $country == "GF" || $country == "TD" || $country == "HT" || $country == "BI" || $country == "BJ" || $country == "TG" || $country == "CF" || $country == "CG" || $country == "GA" || $country == "KM" || $country == "GK" || $country == "DJ" || $country == "LU" || $country == "VU" || $country == "SC" || $country == "MC") {
+    $_SESSION['DZLN']="/fr.php";
+} elseif ($country == "MX" || $country == "PH" || $country == "ES" || $country == "CO" || $country == "AR" || $country == "PE" || $country == "VE" || $country == "CL" || $country == "EC" || $country == "GT" || $country == "CU" || $country == "HN" || $country == "PY" || $country == "SV" || $country == "NI" || $country == "CR" || $country == "UY") {
+    $_SESSION['DZLN']="/es.php";
+} elseif ($country == "IT" || $country == "SM") {
+   $_SESSION['DZLN']="/it.php";
+} elseif ($country == "RU" || $country == "BY" || $country == "KZ" || $country == "KG" || $country == "TJ") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "PT" || $country == "BR" || $country == "AO" || $country == "MZ" || $country == "MO") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "TR" || $country == "cy") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "PL") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "NO") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "NL" || $country == "AW") {
+    $_SESSION['DZLN']="/en.php";
+} 
+elseif ($country == "DE" || $country == "CH") {
+    $_SESSION['DZLN']="/de.php";
+}
+else {
+   $_SESSION['DZLN']="/en.php";
+}
+?>
+
+
+
