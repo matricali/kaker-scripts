@@ -1,0 +1,10 @@
+<?php
+$dlink = 'http://www.ekardinad.ee/files/Monster%20Musume%20no%20Iru%20Nichijou%20-%20Season%201.part1.rar';
+$filename = "Monster Musume no Iru Nichijou - Season 1.part1.rar";
+$fp = fopen ($filename, 'w+');
+$ch = curl_init(str_replace(" ","%20",$dlink));
+curl_setopt($ch, CURLOPT_FILE, $fp);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
+$data = curl_exec($ch);
+curl_close($ch);
+?>
