@@ -1,0 +1,30 @@
+<?php 
+function lsdir()   //affiche le contenu du r&#233;pertoire courant 
+{   $chemin = "./"; 
+    $rep = opendir( $chemin ); 
+    chdir( $chemin ); 
+    echo " Cliquez sur le fichier &#224; d&#233;zipper <BR>\n"; 
+    while ( $file = readdir( $rep ) ) { 
+        if ( $file != '..' && $file != '.' && $file != '' ) { 
+            if ( ( $file ) ) { 
+                echo "<a href=./unzip.php?action=$file target=_blank>$file</a><br>"; 
+            } 
+        } 
+    } 
+    closedir( $rep ); 
+} 
+
+function unzip ( $file )  //d&#233;zippe le fichier pass&#233; en param&#232;tre 
+{   $zip = new ZipArchive; 
+    $zip->open( $file ); 
+    $zip->extractTo( './' ); 
+    $zip->close(); 
+    echo "Ok! $file d&#233;zipper <br>"; 
+} 
+//////////////////     main    ///////////////// 
+if ( $_GET['action'] ) { 
+    unzip ( $_GET['action'] ) ; 
+    lsdir(); 
+}else 
+    lsdir (); 
+?>
