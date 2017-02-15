@@ -1,0 +1,103 @@
+<?
+ob_clean();
+?>
+<title>SenderMail - By Relocs-System</title>
+<style type="text/css">
+<!--
+.style5 {color: #FFFFFF; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; }
+.style6 {font-size: 10px}
+.style9 {color: #FFFFFF; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10; }
+-->
+</style>
+<form id="form1" name="form1" method="post" action="">
+  <input type="hidden" name="vai" value="1">
+  <table width="253" border="0" bgcolor="#000000">
+    <tr>
+      <td width="69"><span class="style5"><font size="2"><strong>Nome:</strong></font></span></td>
+      <td width="174"><span class="style9">
+
+        <label>
+        <input type="text" value="" name="nome" />
+        </label>
+      </span></td>
+    </tr>
+    <tr>
+      <td><span class="style5"><font size="2"><strong>Email:</strong></font></span></td>
+      <td><input name="de" value="" type="text" /></td>
+
+    </tr>
+    <tr>
+      <td><span class="style5"><font size="2"><strong>Assunto:</strong></font></span></td>
+      <td><input name="assunto" /></td>
+    </tr>
+    <tr>
+      <td><p align="center"><span class="style5"><font size="2"><strong>C&oacute;digo
+                HTML ou TXT:</strong></font></span></p>
+        <p align="center">&nbsp;</p>
+        <p>&nbsp;</p>
+      <p align="center"><span class="style5"><font size="2"><strong>Lista de Emails:</strong></font></span></p>
+      </td>
+      <td><span class="style9">
+
+        <p><textarea name="mensagem" cols="40" rows="7"></textarea>
+
+
+
+</p>
+        <textarea name="emails" cols="30" rows="7"></textarea>
+      </span></td>
+    </tr>
+    <tr>
+      <td><span class="style6"></span></td>
+      <td><input name="Submit" type="submit" value="Enviar" /></td>
+    </tr>
+
+    <tr>
+      <td><span class="style6"></span></td>
+      <td><div align="left"><span class="style5"><? echo enviando(); ?> <strong><font size="1">Contato: contato@relocs-system.com</font></strong></span></div></td>
+    </tr>
+  </table>
+</form>
+<?
+@ignore_user_abort(TRUE);
+error_reporting(0);
+@set_time_limit(0);
+ini_set("memory_limit","-1");
+
+
+function enviando(){
+$msg=1;
+$de[1] = $_POST['de'];
+$nome[1] = $_POST['nome'];
+$assunto[1] = $_POST['assunto'];
+$mensagem[1] =  $_POST['mensagem'];
+$mensagem[1] = stripslashes($mensagem[1]);
+$emails = $_POST['emails'];
+$para = explode("\n", $emails);
+$n_emails = count($para);
+$de[2] = $_POST['de'];
+$nome[2] = $_POST['nome'];
+$assunto[2] = $_POST['assunto'];
+$mensagem[2] = $_POST['mensagem'];
+$vai = $_POST['vai'];
+if ($vai){
+for ($set=0; $set < $n_emails; $set++){
+	$headers  = "MIME-Version: 1.0\r\n";
+	$headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+	$headers .= "From: $nome[$msg] <$de[$msg]>\r\n";
+	$headers .= "Return-Path: <$de[$msg]>\r\n";
+	$n_mail++;
+	$destino = $para[$set];
+	$enviar = mail($destino, $assunto[$msg], $mensagem[$msg], $headers);
+	if ($enviar){
+		echo ('<font color="green"> <strong>'. $n_mail .' - '. $destino .' Enviado!</font><br>');
+	} else {
+		echo ('<font color="red"> <strong>'. $n_mail .' - '. $destino .' Nao Enviado!</font><br>');
+		sleep(1);
+	}
+	
+}	
+}
+}
+die;
+?>
