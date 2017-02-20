@@ -1,0 +1,143 @@
+<?php
+if(isset($_POST['subject'])){
+
+ob_start();
+set_time_limit(0);
+error_reporting(0);
+
+$max_emails_sent = 100;
+$sleep_time = 10;
+$subject = htmlentities($_POST['subject']);
+$lines = explode("\n", trim($_POST['emails']));
+$lines = array_filter($lines, 'trim');
+$from = htmlentities($_POST['sender-name'])." <".htmlentities($_POST['sender-email']).">";
+$replyto = htmlentities($_POST['reply-to']);
+$htmlortext = htmlentities($_POST['htmlortext']);
+if(!empty($_FILES['file']['name'])) {
+	$has_attach = 1;
+	$attachment = chunk_split(base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
+	$filename = $_FILES['file']['name'];
+}
+else{
+	$has_attach = 0;
+}
+
+function SendEmail($to, $name, $subject, $message, $from, $replyto)
+{
+	GLOBAL $attachment;
+	GLOBAL $filename;
+	GLOBAL $has_attach;
+	GLOBAL $htmlortext;
+
+	$htmlmessage = $_POST['text'];
+	if($htmlortext == "html"){
+		$txtMessage = strip_tags($htmlmessage, "<a><br><br />");
+		$txtMessage = str_replace("<br>", "\r\n", $txtMessage);
+		$txtMessage = str_replace("<br />", "\r\n", $txtMessage);
+	}
+	else{
+		$txtMessage = $htmlmessage;
+	}
+	
+	$bound_text = md5(time());
+	$bound = "--".$bound_text."\r\n";
+	$bound_last = "--".$bound_text."--\r\n";
+  	 
+	$headers = "From: $from\r\n";
+	if($has_attach==1){
+		$headers .= "MIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=\"$bound_text\"";
+	}
+	else{
+		$headers .= "MIME-Version: 1.0\r\nContent-Type: multipart/alternative; boundary=\"$bound_text\"";
+	}
+	$message .= "Content-Type: text/plain; charset=\"UTF-8\"\r\nContent-Transfer-Encoding: 7bit\r\n\r\n$txtMessage\r\n$bound";
+	if($htmlortext == "html"){
+		$message .= "Content-Type: text/html; charset=\"UTF-8\"\r\nContent-Transfer-Encoding: 7bit\r\n\r\n$htmlmessage\r\n$bound";
+	}
+	else{
+		$message .= "Content-Type: text/html; charset=\"UTF-8\"\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<pre>$htmlmessage</pre>\r\n$bound";
+	}
+  	 
+	$file = $attachment;
+  	if($has_attach==1){
+		$message .= "Content-Type: application/octet-stream; name=\"$filename\"\r\nContent-Transfer-Encoding: base64\r\nContent-disposition: attachment; file=\"$filename\"\r\n\r\n".$file;
+  	}
+	$message .= $bound_last; 
+
+	return mail($to, $subject, $message, $headers);
+}
+
+$count = 0;
+$s = 0;
+$f = 0;
+ob_implicit_flush(1);
+foreach($lines as $line)
+{
+	ob_end_flush();
+   $line_parts = explode(' ', $line);
+   list($person, $user) = array_map('trim', $line_parts);
+   if($count >= $max_emails_sent)
+   {
+   	  echo "Wait $sleep_time seconds...<br>";
+      sleep($sleep_time);
+      $count = 0;
+   }
+   
+   if(SendEmail($person, $user, $subject, $message, $from, $replyto))
+		{
+		echo "{$person} ok<br>";
+		$s++;
+		}
+	else
+		{
+		echo "<font style='color:red'>{$person} failed!</font>";
+		$f++;
+		}
+   $count++;
+   echo str_repeat(' ',1024*64);
+   ob_start();
+   flush();
+}
+echo "<br><br><b>{$s} mails sent successfully!";
+echo "<br>{$f} mails not sent!</b>";}
+else {
+?>
+<html>
+	<head>
+		<title>FuckMailer</title>
+		<style media="screen" type="text/css">
+			body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,th,var{font-style:normal;font-weight:normal;}ol,ul{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,abbr,acronym{border:0;}
+			section, article, header, footer, nav, aside, hgroup{display:block;zoom:1;}
+			body {background: #ffff;width: 100%;height: 0px;}
+			.container {width: 100%;margin: 20px auto;}
+			.container .table {position: relative;width: 100%;min-height: 400px;margin: 0 auto;}
+			.container .table textarea, .container .table input {position:relative;display:inline-block;width:854px;color:#666;font-size:15px!important;font-style:italic;text-shadow:1px 1px 0 #FFF;text-decoration:none;border:1px solid #d7dada;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;background-color:#F4F4F4;box-shadow:0 1px #FFF inset, 0 -1px #DDD inset;-moz-box-shadow:0 1px #fff inset, 0 -1px #ddd inset;-webkit-box-shadow:0 1px #FFF inset, 0 -1px #DDD inset;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;resize:none;outline:none;padding:8px 10px;margin: 0 0 15px 0;}
+			.container .table textarea {height: 300px;}
+			.container .table textarea.content {height: 70px;}
+			.container .table .output {position: relative;width: 821px;color:#FFF;font-size: 21px!important;}
+			.container .table input[type=submit]:active {margin-top: 2px;}
+			.container .table img.separator {display:block; margin-bottom: 15px;}
+			input[type="radio"] {width: 15px !important;}
+			body {color: white;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="logo"></div>
+			<div class="table" align="center">
+				<form enctype="multipart/form-data" method="POST" >	
+					<br><input type="text" name="sender-name" value="" placeholder="Sender name  -- eg: John Smith" />
+					<br><input type="text" name="sender-email" value="" placeholder="Sender email -- eg: j.smith@example.com" />
+					<br><input type="text" name="reply-to" value="" placeholder="Reply-to email -- eg: reply-to@yourmail.com" />
+					<br><input type="text" name="subject" value="" placeholder="Subject -- eg: How are you" />
+					<br><textarea class="emails" name="emails" placeholder="Mails">Load your emails here!</textarea><br>
+					<br><input type="radio" name="htmlortext" value="html" checked>HTML Message &nbsp;&nbsp;&nbsp;&nbsp;or &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="htmlortext" value="text">Text Message<br>
+					<br><textarea class="emails" name="text" placeholder="Load your letter here!"></textarea>
+					<br><input type="file" name="file" value=""/>
+					<br><input type="submit" value="Send mails">
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
+<?php }?>
