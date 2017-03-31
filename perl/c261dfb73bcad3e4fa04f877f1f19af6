@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+open INPUT, "</etc/passwd";
+while ( <INPUT> )
+{
+$line=$_; @sprt=split(/:/,$line); $user=$sprt[0];
+system('ln -s /home/'.$user.'/public_html ' . $user);
+}
