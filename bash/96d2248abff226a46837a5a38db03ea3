@@ -1,0 +1,36 @@
+#!/bin/bash
+##CageFS proxyexec wrapper - ver 14
+USR=`/usr/bin/whoami`
+TOKEN=`/bin/cat /var/.cagefs/.cagefs.token`
+PIDFILE="/tmp/.cagefs.proxy.$$"
+USER_INTERRUPT=13
+CWD=`pwd`
+
+if [ -e /var/.cagefs/origin ]; then
+ORIGIN=`/bin/cat /var/.cagefs/origin`
+REMOTE="/usr/bin/ssh -F /etc/ssh/cagefs-rexec_config $USR@$ORIGIN"
+else
+REMOTE=""
+fi
+
+ctrl_c_handler() {
+if [ -f $PIDFILE ]; then
+pid=`/bin/cat $PIDFILE`
+/bin/rm -f $PIDFILE > /dev/null 2>&1
+/bin/kill -s SIGINT "$pid" > /dev/null 2>&1
+fi
+exit $USER_INTERRUPT
+}
+
+if [ -z "$REMOTE" ]; then
+trap 'ctrl_c_handler' 2
+fi
+
+$REMOTE /usr/sbin/proxyexec -c cagefs.sock "$USR" "$TOKEN" "$CWD" PASSWD $$ "$@"
+RETVAL=$?
+
+if [ -z "$REMOTE" ]; then
+/bin/rm -f $PIDFILE > /dev/null 2>&1
+fi
+
+exit $RETVAL
