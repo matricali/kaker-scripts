@@ -1,0 +1,57 @@
+<html>
+<body style="background:#0d0d0d">
+
+<title>CondoR Mirror-H.ORG Mass Deface :) </title>
+<center>   
+<form action="http://www.mirror-h.org/mass" method="post" onsubmit="target_popup(this)">
+
+<br>
+<h1> CondoR Mirror-H.ORG Mass Deface :) </h1>
+<br>
+<b><font color="#c1c1c1">Hacker:</font> </b><input name="hacker" class="Tinput" type="text" id="Username" value="" size="20" maxlength="33">
+
+<br><br>
+
+<textarea name="domain" style="color:white" rows="10" cols="50" onclick="this.value=''">http:// don't forget put!</textarea><br><font color="red"><b>Site Ekleme Limiti 40 Adettir.  Limiti Ge&#231;en Siteler eklenmemektedir!</b></font><br><font color="red"><b>Sitelerin ba&#351;&#305;na "http://" eklemeyi unutmay&#305;n&#305;z. aksi taktirde &#231;ali&#351;maz</b></font><br><font><input type="submit" style="font-weight: bold; font-size: 13pt;" value="Bildir"></font><table width="100%" border="0" align="center" cellspacing="1" cellpadding="3">
+
+                  
+                
+              </table>
+
+</form>
+</center>
+</body>
+<style>
+form input {
+    border: 2px solid #333;
+    background: #4B4B4B;
+    color: #bbb;
+    font-family: Segoe UI;
+    font-size: 15px;
+    padding: 3px;
+    margin-bottom: 2px;
+}
+textarea {
+    border: 2px solid #333;
+    background: #4B4B4B;
+    color: #bbb;
+    font-family: Segoe UI;
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+body {
+color:#fff;
+}
+</style>
+</html>
+
+
+
+
+
+          
+
+
+         
+                    
+
