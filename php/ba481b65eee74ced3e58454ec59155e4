@@ -1,0 +1,186 @@
+<!-- left column -->
+<div class="col-md-12">
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Cadastro de Produto</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+
+        <?php
+        if ($_POST) {
+
+            $produto = $_POST['produto'];
+            $brevedesc = $_POST['breve-desc'];
+
+
+
+            $descricaocomp = $_POST['descricao-completa'];
+            $categoria_id = $_POST['categoria_id'];
+             $destaque = $_POST['destaque'];
+
+
+            //capa
+            $capaCaminho = $_FILES['capa']['name'];
+            $f1Caminho = $_FILES['foto01']['name'];
+            $f2Caminho = $_FILES['foto02']['name'];
+            $f3Caminho = $_FILES['foto03']['name'];
+            $f4Caminho = $_FILES['foto04']['name'];
+
+            if (!empty($capaCaminho)) {
+
+                $caminho_capa = "produto/fotos/" . $capaCaminho;
+                $capa = $_FILES['capa'];
+
+                move_uploaded_file($capa['tmp_name'], "produto/fotos/{$capa['name']}");
+            } else {
+                $caminho_capa = "produto/fotos/sem-imagem.jpg";
+            }
+
+            if (!empty($f1Caminho)) {
+
+                $caminho_f1 = "produto/fotos/" . $f1Caminho;
+                $foto01 = $_FILES['foto01'];
+                move_uploaded_file($foto01['tmp_name'], "produto/fotos/{$foto01['name']}");
+            } else {
+                $caminho_f1 = "produto/fotos/sem-imagem.jpg";
+            }
+
+            if (!empty($f2Caminho)) {
+
+                $caminho_f2 = "produto/fotos/" . $f2Caminho;
+                $foto02 = $_FILES['foto02'];
+                move_uploaded_file($foto02['tmp_name'], "produto/fotos/{$foto02['name']}");
+            } else {
+                $caminho_f2 = "produto/fotos/sem-imagem.jpg";
+            }
+
+            if (!empty($f3Caminho)) {
+
+                $caminho_f3 = "produto/fotos/" . $f3Caminho;
+                $foto03 = $_FILES['foto03'];
+                move_uploaded_file($foto03['tmp_name'], "produto/fotos/{$foto03['name']}");
+            } else {
+                $caminho_f3 = "produto/fotos/sem-imagem.jpg";
+            }
+
+            if (!empty($f4Caminho)) {
+
+                $caminho_f4 = "produto/fotos/" . $f4Caminho;
+                $foto04 = $_FILES['foto04'];
+                move_uploaded_file($foto04['tmp_name'], "produto/fotos/{$foto04['name']}");
+            } else {
+                $caminho_f4 = "produto/fotos/sem-imagem.jpg";
+            }
+
+
+            //chama funcao
+            if (cadastraProduto($conexao, $produto, $brevedesc, $descricaocomp, $caminho_capa, $caminho_f1, $caminho_f2, $caminho_f3, $caminho_f4,$categoria_id,$destaque)) {
+
+                echo "<div class='alert alert-success'>* Produto cadastrado com Sucesso!</div>";
+            }//fim if cadastraproduto
+            else {
+
+                $erro = mysqli_error($conexao);
+                echo "aconteceu o erro $erro";
+
+                //  echo "<div class='alert alert-danger'>* Preencha todos os campos corretamente.</div>";
+            }
+        }
+        ?>
+
+
+
+
+        <form method="POST"  enctype="multipart/form-data">
+            <div class="box-body">
+                <div class="form-group">
+                    FOTO DE CAPA
+                    <input type="file" class="form-control" name="capa" placeholder="Selecione um arquivo">
+                </div>
+
+                <div class="form-group">
+                    FOTO 01
+                    <input type="file" class="form-control" name="foto01" placeholder="Selecione a foto1 arquivo">
+                </div>
+
+                <div class="form-group">
+                    FOTO 02
+                    <input type="file" class="form-control" name="foto02" placeholder="Selecione a foto1 arquivo">
+                </div>
+
+                <div class="form-group">
+                    FOTO 03
+                    <input type="file" class="form-control" name="foto03" placeholder="Selecione a foto1 arquivo">
+                </div>
+
+                <div class="form-group">
+                    FOTO 04
+                    <input type="file" class="form-control" name="foto04" placeholder="Selecione a foto1 arquivo">
+                </div>
+
+                <div class="form-group">
+                    PRODUTO
+                    <input type="text" class="form-control" name="produto"  placeholder="Produto">
+                </div>
+
+                <div class="form-group">
+                    BREVE DESCRIÇÃO
+                    <input type="text" class="form-control" name="breve-desc" placeholder="Breve descrição">
+                </div>
+
+
+                <!-- select -->
+
+
+                <!-- textarea -->
+                <div class="form-group">
+                    DESCRICÃO COMPLETA DO PRODUTO
+
+                    <textarea name="descricao-completa" class="textarea" placeholder="Por favor, digite a descrição completa do produto" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"><textarea>
+
+
+                </div>
+
+                <div class="form-group">
+                    CATEGORIA
+                      <?php $categorias = listarCategorias($conexao); ?>
+                    <select class="form-control" name="categoria_id">
+
+                        <?php foreach ($categorias as $cat) { ?>
+                           
+                           <option value="<?= $cat['id'];?>"><?= $cat['cat_descricao'];?></option>
+
+
+                        <?php }?>
+
+
+                    </select>
+                </div>
+
+                 <div class="form-group">
+                    MOSTRAR PRODUTO COMO DESTAQUE
+                    
+                    <select class="form-control" name="destaque">
+                        <option value="sim">Sim</option>
+                        <option value="não">Não</option>
+
+                    </select>
+                </div>
+
+
+
+
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">CADASTRAR</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+<!--/.col (left) -->
