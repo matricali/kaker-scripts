@@ -1,0 +1,31 @@
+<?php # AUTHOR: Daniel Pineault, CARDA Consultants Inc. # DATE: 2010-06-25 # PURPOSE: Generate a random string or unique Id # COPYRIGHT: You are free to use this code as you wish as long as # this header is include in the final work. This is # provided 'AS IS' and I assume no liability for its # usage. # foreach($_POST as $key=&gt;$value) {
+		$$key = strip_tags($value); //sanitize provided user entries
+	}
+ 
+	if(isset($GenRndStr)){
+		$sUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$sLower = "abcdefghijklmnopqrstuvwxyz";
+		$sNumbers = "0123456789";
+		$sSpecial = "!@#$%^&amp;*()[]{},.;:'/\~-+=|&lt;&gt;";
+ 
+		if($UCase==1){
+			$s .= $sUpper;
+		}
+		if($LCase==1){
+			$s .= $sLower;
+		}
+		if($Nbr==1){
+			$s .= $sNumbers;
+		}
+		if($SpecChrs==1){
+			$s .= $sSpecial;
+		}
+		if(strlen($ExChrs)&gt;0){
+			for($k = 0; $k &lt;= (strlen($ExChrs)-1); $k++){
+				$s = str_replace($ExChrs{$k}, "", $s);
+			}
+		}
+ 
+		$sLen = $RandStrLen;
+ 
+		for($i = 1; $i &lt;= $sLen; $i++){ $sRandString .= $s{rand(1,strlen($s))}; } } ?-->
