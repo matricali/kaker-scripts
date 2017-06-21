@@ -1,0 +1,3 @@
+safe_mode = Off
+		disable_functions = None
+		
